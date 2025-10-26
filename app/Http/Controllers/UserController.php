@@ -13,6 +13,12 @@ use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        // Require authentication and restrict user management to Admin role
+        $this->middleware('auth');
+        $this->middleware('role:Admin');
+    }
     public function index(Request $request): View
     {
         $data = User::latest()->paginate(5);

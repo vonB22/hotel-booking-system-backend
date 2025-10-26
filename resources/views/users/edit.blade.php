@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+@role('Admin')
 <div class="row">
     <div class="col-lg-12 margin-tb d-flex justify-content-between align-items-center">
         <h2>Edit User</h2>
@@ -59,5 +60,12 @@
         </div>
     </div>
 </form>
+
+@else
+    <div class="alert alert-danger">
+        You do not have permission to access this page.
+    </div>
+    <a class="btn btn-secondary btn-sm" href="{{ route('home') }}">Back to dashboard</a>
+@endrole
 
 @endsection

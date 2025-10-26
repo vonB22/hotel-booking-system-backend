@@ -4,11 +4,11 @@
 <div class="row mb-3">
     <div class="col-lg-12 d-flex justify-content-between align-items-center">
         <h2 class="mb-0">Users Management</h2>
-        @can('role-create')
+        @role('Admin')
             <a class="btn btn-success btn-sm" href="{{ route('users.create') }}">
                 <i class="fa fa-plus"></i> Create New User
             </a>
-        @endcan
+        @endrole
     </div>
 </div>
 
@@ -39,6 +39,7 @@
           @endif
         </td>
         <td>
+            @role('Admin')
              <a class="btn btn-info btn-sm" href="{{ route('users.show',$user->id) }}">
                  <i class="fa-solid fa-list"></i> Show
              </a>
@@ -53,6 +54,9 @@
                       <i class="fa-solid fa-trash"></i> Delete
                   </button>
               </form>
+            @else
+             <span class="text-muted">No actions available</span>
+            @endrole
         </td>
     </tr>
  @endforeach
