@@ -7,26 +7,39 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
 
 class CreateAdminUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * php artisan db:seed --class=CreateAdminUserSeeder
      */
     public function run(): void
     {
-        $user = User::create([
-            'name' => 'Admin', 
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('12345678')
-        ]);
+        // Ensure required roles exist
+        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        $userRole = Role::firstOrCreate(['name' => 'User']);
 
-        $role = Role::create(['name' => 'Admin']);
+        $permissionIds = Permission::pluck('id')->all();
+        if (!empty($permissionIds)) {
+            $adminRole->syncPermissions($permissionIds);
+        }
 
-        $permissions = Permission::pluck('id','id')->all();
+        $user = User::firstOrNew(['email' => 'admin@gmail.com']);
+        $user->name = 'Admin';
 
-        $role->syncPermissions($permissions);
+        if (empty($user->password)) {
+            $user->password = Hash::make('admin123');
+        }
 
-        $user->assignRole([$role->id]);
+        if (empty($user->email_verified_at)) {
+            $user->email_verified_at = now();
+        }
+        $user->save();
+
+        if (! $user->hasRole($adminRole->name)) {
+            $user->assignRole($adminRole->name);
+        }
     }
 }
