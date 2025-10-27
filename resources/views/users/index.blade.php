@@ -41,12 +41,26 @@
                             <td>{{ $user->email }}</td>
                             <td>
                                 @if(!empty($user->getRoleNames()))
-                                @foreach($user->getRoleNames() as $v)
-                                <span
-                                    class="badge bg-success-subtle text-success border border-success-subtle me-1">{{ $v }}</span>
-                                @endforeach
+                                    @foreach($user->getRoleNames() as $v)
+                                        @php
+                                        switch (strtolower($v)) {
+                                            case 'admin':
+                                                $badgeClass = 'bg-danger-subtle text-danger border border-danger-subtle';
+                                                break;
+                                            case 'user':
+                                                $badgeClass = 'bg-success-subtle text-success border border-success-subtle';
+                                                break;
+                                            default:
+                                                $badgeClass = 'bg-secondary-subtle text-secondary border border-secondary-subtle';
+                                                break;
+                                        }
+                                        @endphp
+
+                                        <span class="badge {{ $badgeClass }} me-1">{{ ucfirst($v) }}</span>
+                                    @endforeach
                                 @endif
                             </td>
+
                             <td>
                                 <div class="d-flex gap-2">
                                     @role('Admin')
@@ -125,12 +139,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const userId = button.getAttribute('data-user-id');
         const userName = button.getAttribute('data-user-name');
 
-    const form = document.getElementById('deleteForm');
-    const userNameEl = document.getElementById('deleteUserName');
+        const form = document.getElementById('deleteForm');
+        const userNameEl = document.getElementById('deleteUserName');
 
-    // Prefer using the full URL provided on the button to avoid templating issues
-    const url = button.getAttribute('data-user-url');
-    form.action = url || '';
+        // Prefer using the full URL provided on the button to avoid templating issues
+        const url = button.getAttribute('data-user-url');
+        form.action = url || '';
         userNameEl.textContent = userName;
     });
 });

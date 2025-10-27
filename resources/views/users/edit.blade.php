@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-lg-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <h2 class="mb-0">✏️ Edit User</h2>
+            <h2 class="mb-0">Edit User</h2>
             <a class="btn btn-outline-primary btn-sm shadow-sm" href="{{ route('users.index') }}">
                 <i class="fa fa-arrow-left me-1"></i> Back
             </a>
