@@ -103,7 +103,7 @@
         }
 
         section {
-            padding: 20px;
+            padding: 20px 20px 0;
             transition: margin-left 0.3s ease;
         }
 
@@ -276,8 +276,8 @@
                     <ul class="navbar-nav align-items-lg-center">
                         <li class="nav-item px-2"><a class="nav-link" href="#Home">Home</a></li>
                         <li class="nav-item px-2"><a class="nav-link" href="#Hotels">Hotels</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="#about">About</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="#contact">Contact</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="#About">About</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="#Contact">Contact</a></li>
                     </ul>
                     @endif
                 </div>
@@ -364,13 +364,13 @@
             </aside>
 
             <section class="with-sidebar">
-                <div class="container-fluid py-4">
+                <div class="container-fluid py-3">
                     @yield('content')
                 </div>
             </section>
             @else
             <section>
-                <div class="container py-4">
+                <div class="container py-3">
                     @yield('content')
                 </div>
             </section>
@@ -380,23 +380,23 @@
 
     <!-- Sidebar Toggle Script -->
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleBtn = document.getElementById('toggleSidebar');
-        const sidebar = document.getElementById('adminSidebar');
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('adminSidebar');
 
-        if (toggleBtn && sidebar) {
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('show');
-            });
-        }
+            if (toggleBtn && sidebar) {
+                toggleBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('show');
+                });
+            }
 
-        // Close sidebar when a link is clicked (mobile only)
-        sidebar?.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 992) sidebar.classList.remove('show');
+            // Close sidebar when a link is clicked (mobile only)
+            sidebar?.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 992) sidebar.classList.remove('show');
+                });
             });
         });
-    });
     </script>
     @stack('scripts')
 </body>

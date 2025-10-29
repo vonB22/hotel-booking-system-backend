@@ -527,7 +527,10 @@
     footer {
         background: #1a1a1a;
         color: #bbb;
-        padding: 3rem 0 1.5rem;
+        padding: 2rem 0 1rem;
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        box-sizing: border-box;
     }
 
     footer h5 {
@@ -578,8 +581,8 @@
 
     .footer-bottom {
         border-top: 1px solid #333;
-        margin-top: 2rem;
-        padding-top: 1.5rem;
+        margin-top: 0;
+        padding-top: 1rem;
         text-align: center;
         color: #888;
     }
@@ -629,11 +632,57 @@
         .newsletter-form {
             flex-direction: column;
         }
+        .footer {
+            width: 100%;
+            background-color: #222;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer .container-fluid {
+            padding-top: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer ul li a {
+            color: #ddd;
+            text-decoration: none;
+        }
+
+        .footer ul li a:hover {
+            color: #fff;
+        }
+
+        .footer .social-icon {
+            color: #ddd;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer .social-icon:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #444;
+            padding-top: 1rem;
+        }
     }
 </style>
 
 <!-- Hero Section -->
-<section class="hero">
+<section class="hero" id="Home">
     <div class="hero-content container">
         <!-- Trust Badge -->
         <div class="trust-badge">
@@ -700,7 +749,7 @@
 </section>
 
 <!-- Featured Hotels -->
-<section id="hotels" class="featured-section">
+<section class="featured-section" id="Hotels">
     <div class="container">
         <div class="section-header">
             <h2>Featured Hotels</h2>
@@ -887,11 +936,11 @@
 </section>
 
 <!-- About Section -->
-<section class="about-section">
+<section class="about-section" id="About">
     <div class="container">
         <div class="section-header">
             <h2>ABOUT US</h2>
-            <p>Why travelers worldwide trust InstaStay for their perfect accommodations</p>
+            <p>Why travelers worldwide trust StayEase for their perfect accommodations</p>
         </div>
 
         <div class="row">
@@ -938,7 +987,7 @@
 </section>
 
 <!-- Contact Section -->
-<section class="contact-section">
+<section class="contact-section" id="Contact">
     <div class="container">
         <div class="section-header">
             <h2>Get in Touch</h2>
@@ -966,7 +1015,7 @@
                         </svg>
                     </div>
                     <h5>Email</h5>
-                    <p class="mb-1">support@instastay.com</p>
+                    <p class="mb-1">support@stayease.com</p>
                     <small class="text-muted">24/7 support available</small>
                 </div>
             </div>
@@ -1018,11 +1067,11 @@
 </section>
 
 <!-- Footer -->
-<footer>
-    <div class="container">
-        <div class="row">
+<footer class="footer">
+    <div class="container-fluid px-5 py-3">
+        <div class="row text-light">
             <div class="col-md-3 mb-4">
-                <h5>InstaStay</h5>
+                <h5>StayEase</h5>
                 <p class="mb-3" style="font-size: 0.9rem;">Your trusted partner for finding the perfect accommodation worldwide.</p>
                 <div class="social-icons">
                     <a href="#" class="social-icon"><i class="bi bi-facebook"></i></a>
@@ -1059,11 +1108,12 @@
                 </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; {{ date('Y') }} InstaStay. All rights reserved.</p>
+        <div class="footer-bottom text-center mt-3">
+            <p class="mb-0">&copy; {{ date('Y') }} StayEase. All rights reserved.</p>
         </div>
     </div>
 </footer>
+
 
 <!-- Booking Modal -->
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
