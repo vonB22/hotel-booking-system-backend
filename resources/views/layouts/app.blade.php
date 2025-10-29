@@ -242,6 +242,54 @@
             background: #f3f4f6;
             color: #4338ca;
         }
+        /* Page transition loader */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(10,11,13,0.65), rgba(17,24,39,0.75));
+            color: #fff;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 220ms ease, visibility 220ms ease;
+        }
+
+        .page-loader.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-loader-inner {
+            text-align: center;
+            max-width: 360px;
+            width: calc(100% - 48px);
+            padding: 28px 20px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+            backdrop-filter: blur(6px);
+        }
+
+        .loader-spinner {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 5px solid rgba(255,255,255,0.08);
+            border-top-color: #fff;
+            animation: spin 900ms linear infinite;
+            margin: 10px auto 6px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loader-text {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.95);
+            margin-top: 6px;
+        }
     </style>
 </head>
 
@@ -287,13 +335,13 @@
                     @guest
                         @if (Route::has('login') && empty($hideNav))
                         <li class="nav-item me-2">
-                            <a class="nav-link text-dark fw-semibold {{ request()->routeIs('login') ? 'active-link' : '' }}"
+                            <a data-skip-loader="true" class="nav-link text-dark fw-semibold {{ request()->routeIs('login') ? 'active-link' : '' }}"
                                 href="{{ route('login') }}">Login</a>
                         </li>
                         @endif
                         @if (Route::has('register') && empty($hideNav))
                         <li class="nav-item">
-                            <a class="nav-link btn btn-sm btn-primary text-white px-3 fw-semibold shadow-sm rounded-pill {{ request()->routeIs('register') ? 'active-btn' : '' }}"
+                            <a data-skip-loader="true" class="nav-link btn btn-sm btn-primary text-white px-3 fw-semibold shadow-sm rounded-pill {{ request()->routeIs('register') ? 'active-btn' : '' }}"
                                 href="{{ route('register') }}">
                                 Sign Up
                             </a>
@@ -378,6 +426,20 @@
         </main>
     </div>
 
+        <!-- Page loader (global) -->
+        <div id="pageLoader" class="page-loader" aria-hidden="true" aria-live="polite">
+            <div class="page-loader-inner" role="status">
+                <div class="loader-brand">
+                    <!-- <i class="fa-solid fa-hotel fa-3x"></i> -->
+                    <div style="text-align:center">
+                        <div style="font-size:1rem;color:rgba(255,255,255,0.7)">Loading…</div>
+                    </div>
+                </div>
+                <div class="loader-spinner" aria-hidden="true"></div>
+                <div class="loader-text">Preparing your page — this usually takes a second.</div>
+            </div>
+        </div>
+
     <!-- Sidebar Toggle Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -397,6 +459,102 @@
                 });
             });
         });
+    </script>
+    <script>
+        /* Page loader controller */
+        (function () {
+            const loader = document.getElementById('pageLoader');
+            if (!loader) return;
+
+            let active = false;
+
+            function showLoader() {
+                if (active) return;
+                active = true;
+                // small delay so quick navigations don't flash the loader
+                requestAnimationFrame(() => loader.classList.add('show'));
+            }
+
+            function hideLoader() {
+                if (!active) return;
+                active = false;
+                loader.classList.remove('show');
+            }
+
+            function isAuthPath(pathname) {
+                // match if the path contains /login or /register as a segment
+                return /(^|\/)\b(login|register)\b(\/|$)/i.test(pathname || '');
+            }
+
+            // Show on internal link clicks (non-hash, same-origin), except auth routes
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a');
+                if (!a) return;
+                const href = a.getAttribute('href');
+                if (!href) return;
+                // ignore anchors and fragments
+                if (href.startsWith('#')) return;
+                // ignore links that open in new tab or have download attribute
+                if (a.target && a.target !== '' && a.target !== '_self') return;
+                if (a.hasAttribute('download')) return;
+                // ignore external links
+                let url;
+                try {
+                    url = new URL(a.href, location.href);
+                    if (url.origin !== location.origin) return;
+                    // if same path but only different hash, don't show
+                    if (url.pathname === location.pathname && url.search === location.search) return;
+                } catch (err) {
+                    return; // malformed href
+                }
+
+                // if link explicitly opts out (login/register buttons), don't show loader
+                if (a.hasAttribute('data-skip-loader')) return;
+                // skip if navigating to login/register paths (fallback)
+                if (isAuthPath(url.pathname)) return;
+
+                // show loader for navigations
+                showLoader();
+            }, { capture: true });
+
+            // Show on form submissions, except auth forms (login/register) or data-ajax forms
+            document.addEventListener('submit', (e) => {
+                const form = e.target;
+                if (!form || !(form instanceof HTMLFormElement)) return;
+                // if form uses AJAX (has data-ajax) skip
+                if (form.hasAttribute('data-ajax')) return;
+                // determine action
+                let action = form.getAttribute('action') || location.pathname;
+                try {
+                    const url = new URL(action, location.href);
+                    action = url.pathname;
+                } catch (err) {
+                    // keep action as-is if malformed
+                }
+                // if the form explicitly opts out (e.g., auth forms), don't show loader
+                if (form.hasAttribute('data-skip-loader')) return;
+                if (isAuthPath(action)) return;
+                showLoader();
+            }, { capture: true });
+
+            // Show when page is unloading (back/forward / refresh)
+            window.addEventListener('beforeunload', (e) => {
+                // don't show on auth pages unload because auth UI already shows its loader
+                if (isAuthPath(location.pathname)) return;
+                showLoader();
+            });
+
+            // Hide on initial page load
+            window.addEventListener('load', () => {
+                // small timeout to let any last paint complete
+                setTimeout(hideLoader, 120);
+            });
+
+            // hide if the DOM is ready quickly
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(hideLoader, 80);
+            });
+        })();
     </script>
     @stack('scripts')
 </body>
