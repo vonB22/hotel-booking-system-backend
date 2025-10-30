@@ -385,12 +385,12 @@
                     <h6 class="text-muted text-uppercase mb-3">Admin Panel</h6>
                     <ul class="nav flex-column">
                         <li class="nav-item mb-1">
-                            <a href="#"
-                                class="nav-link">
-                                <i class="fa-solid fa-chart-pie"></i>OverView
+                            <a href="{{ route('overview.index') }}"
+                                class="nav-link {{ request()->routeIs('overview.*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-chart-pie"></i>Overview
                             </a>
                         </li>
-                         <li class="nav-item mb-1">
+                        <li class="nav-item mb-1">
                             <a href="{{ route('users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-users me-2"></i>Users
@@ -408,9 +408,9 @@
                                 <i class="fa-solid fa-hotel me-2"></i>Hotels
                             </a>
                         </li>
-                         <li class="nav-item mb-1">
-                            <a href="#"
-                                class="nav-link">
+                        <li class="nav-item mb-1">
+                            <a href="{{ route('bookings.index') }}"
+                                class="nav-link {{ request()->routeIs('bookings.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-calendar-check me-2"></i>Bookings
                             </a>
                         </li>

@@ -26,4 +26,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('bookings', App\Http\Controllers\BookingController::class);
+    // Overview dashboard for admins
+    Route::get('overview', [App\Http\Controllers\OverviewController::class, 'index'])->name('overview.index');
+    Route::get('overview/stats', [App\Http\Controllers\OverviewController::class, 'stats'])->name('overview.stats');
 });

@@ -1137,24 +1137,41 @@
                             <div style="font-size: 2rem; font-weight: 700;">$<span id="modalHotelPrice"></span></div>
                             <small class="text-muted">per night</small>
                         </div>
-                        <form>
+                        @auth
+                        <form action="{{ route('bookings.store') }}" method="POST" id="landingBookingForm">
+                            @csrf
+                            <input type="hidden" name="product_id" id="modalProductId" value="">
+                            <input type="hidden" name="product_name" id="modalProductName" value="">
+                            <input type="hidden" name="price" id="modalProductPriceInput" value="">
+                            <input type="hidden" name="guests" id="modalGuests" value="2">
                             <div class="mb-3">
                                 <label class="form-label">Check-in</label>
-                                <input type="date" class="form-control" required>
+                                <input type="date" name="check_in" id="modalCheckIn" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Check-out</label>
-                                <input type="date" class="form-control" required>
+                                <input type="date" name="check_out" id="modalCheckOut" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Adults</label>
-                                <input type="number" class="form-control" min="1" value="2">
+                                <input type="number" id="modalAdults" class="form-control" min="1" value="2">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Kids</label>
-                                <input type="number" class="form-control" min="0" value="0">
+                                <input type="number" id="modalKids" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Notes (optional)</label>
+                                <textarea name="notes" id="modalNotes" class="form-control" rows="3"></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary w-100 btn-lg">Book Now</button>
+                        </form>
+                        @else
+                        <div class="mb-3">
+                            <div class="alert alert-info">Please sign in to complete a booking.</div>
+                            <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#authModal">Sign in / Register</button>
+                        </div>
+                        @endauth
                         </form>
                     </div>
                 </div>
@@ -1201,7 +1218,31 @@
         document.getElementById('modalHotelName').textContent = name;
         document.getElementById('modalHotelPrice').textContent = price;
         document.getElementById('modalHotelImage').src = image;
+        // populate hidden inputs for booking submission
+        const pid = '';
+        const pname = name;
+        const pprice = price;
+        const prodIdInput = document.getElementById('modalProductId');
+        const prodNameInput = document.getElementById('modalProductName');
+        const prodPriceInput = document.getElementById('modalProductPriceInput');
+        if (prodIdInput) prodIdInput.value = pid;
+        if (prodNameInput) prodNameInput.value = pname;
+        if (prodPriceInput) prodPriceInput.value = pprice;
     }
+
+    // ensure guests hidden input is set before submit
+    document.addEventListener('DOMContentLoaded', function(){
+        const form = document.getElementById('landingBookingForm');
+        if (!form) return;
+        form.addEventListener('submit', function(e){
+            const adults = parseInt(document.getElementById('modalAdults')?.value || '0', 10);
+            const kids = parseInt(document.getElementById('modalKids')?.value || '0', 10);
+            const guests = Math.max(1, (isNaN(adults) ? 0 : adults) + (isNaN(kids) ? 0 : kids));
+            const guestsInput = document.getElementById('modalGuests');
+            if (guestsInput) guestsInput.value = guests;
+            // allow form to submit normally (will require auth)
+        });
+    });
 
     // Switch to register form
     function switchToRegister() {
