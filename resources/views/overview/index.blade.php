@@ -22,6 +22,10 @@
         overflow: hidden;
     }
 
+    .stat-card .grow {
+        min-width: 0;
+    }
+
     .stat-card::before {
         content: '';
         position: absolute;
@@ -300,7 +304,7 @@
                     <i class="fa-solid fa-chart-line me-2"></i>
                     Dashboard Overview
                 </h2>
-                <p class="mb-0 opacity-90">Welcome back! Here's what's happening with InstaStay today.</p>
+                <p class="mb-0 opacity-90">Welcome back! Here's what's happening with StayEase today.</p>
                 <div class="time-display" id="currentDateTime">
                     <i class="fa-solid fa-clock me-1"></i>
                     <span id="dateTimeText"></span>
@@ -318,7 +322,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="stat-card users">
                 <div class="d-flex align-items-start justify-content-between">
-                    <div class="flex-grow-1">
+                    <div class="grow">
                         <div class="stat-label">Total Users</div>
                         <div id="statUsers" class="stat-value">
                             <div class="skeleton-loader" style="width: 80px;"></div>
@@ -338,7 +342,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="stat-card hotels">
                 <div class="d-flex align-items-start justify-content-between">
-                    <div class="flex-grow-1">
+                    <div class="grow">
                         <div class="stat-label">Total Hotels</div>
                         <div id="statProducts" class="stat-value">
                             <div class="skeleton-loader" style="width: 80px;"></div>
@@ -358,7 +362,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="stat-card bookings">
                 <div class="d-flex align-items-start justify-content-between">
-                    <div class="flex-grow-1">
+                    <div class="grow">
                         <div class="stat-label">Total Bookings</div>
                         <div id="statBookings" class="stat-value">
                             <div class="skeleton-loader" style="width: 80px;"></div>
@@ -378,7 +382,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="stat-card roles">
                 <div class="d-flex align-items-start justify-content-between">
-                    <div class="flex-grow-1">
+                    <div class="grow">
                         <div class="stat-label">User Roles</div>
                         <div id="statRoles" class="stat-value">
                             <div class="skeleton-loader" style="width: 80px;"></div>
