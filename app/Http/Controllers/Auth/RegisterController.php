@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -54,6 +55,12 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         $user = $this->create($request->all());
+
+        try {
+            Role::firstOrCreate(['name' => 'User']);
+            $user->assignRole('User');
+        } catch (\Throwable $e) {
+        }
 
         // Do NOT log the user in. Redirect to login with success message.
         return redirect()->route('login')->with('status', 'Registration successful. Please log in.');
