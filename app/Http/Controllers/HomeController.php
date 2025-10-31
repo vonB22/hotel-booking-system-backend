@@ -23,6 +23,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+        if ($user && method_exists($user, 'hasRole') && $user->hasRole('Admin')) {
+            return redirect()->route('overview.index');
+        }
+
         return view('home');
     }
 }

@@ -68,7 +68,7 @@
                                 </a>
                                 @can('product-edit')
                                     <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
-                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                 @endcan
                                 @can('product-delete')

@@ -2,6 +2,9 @@
 
 @section('content')
 <style>
+    html {
+        scroll-behavior: smooth;
+    }
     /* Base Styles */
     body {
         font-family: 'Poppins', sans-serif;
@@ -682,7 +685,7 @@
 </style>
 
 <!-- Hero Section -->
-<section class="hero" id="Home">
+<section class="hero" id="home">
     <div class="hero-content container">
         <!-- Trust Badge -->
         <div class="trust-badge">
@@ -749,7 +752,7 @@
 </section>
 
 <!-- Featured Hotels -->
-<section class="featured-section" id="Hotels">
+<section class="featured-section" id="hotels">
     <div class="container">
         <div class="section-header">
             <h2>Featured Hotels</h2>
@@ -936,7 +939,7 @@
 </section>
 
 <!-- About Section -->
-<section class="about-section" id="About">
+<section class="about-section" id="about">
     <div class="container">
         <div class="section-header">
             <h2>ABOUT US</h2>
@@ -987,7 +990,7 @@
 </section>
 
 <!-- Contact Section -->
-<section class="contact-section" id="Contact">
+<section class="contact-section" id="contact">
     <div class="container">
         <div class="section-header">
             <h2>Get in Touch</h2>

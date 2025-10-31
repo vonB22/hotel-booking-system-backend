@@ -45,7 +45,7 @@
                                 @can('role-edit')
                                 <a class="btn btn-outline-primary btn-sm me-1"
                                     href="{{ route('roles.edit', $role->id) }}" title="Edit Role">
-                                    <i class="fa-solid fa-pen"></i>
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
                                 @endcan
                                 @can('role-delete')

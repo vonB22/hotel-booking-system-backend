@@ -322,10 +322,10 @@
                 <div class="collapse navbar-collapse justify-content-center" id="mainNavbar">
                     @if($showCentered && !$isAdmin)
                     <ul class="navbar-nav align-items-lg-center">
-                        <li class="nav-item px-2"><a class="nav-link" href="#Home">Home</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="#Hotels">Hotels</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="#About">About</a></li>
-                        <li class="nav-item px-2"><a class="nav-link" href="#Contact">Contact</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="#home">Home</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="#hotels">Hotels</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="#about">About</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" href="#contact">Contact</a></li>
                     </ul>
                     @endif
                 </div>
@@ -415,7 +415,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-1">
-                            <a href="{{ url('/') }}" target="_blank" class="nav-link">
+                            <a href="{{ url('/') }}" target="_self" class="nav-link">
                                 <i class="fa-solid fa-globe me-2"></i>View Site
                             </a>
                         </li>

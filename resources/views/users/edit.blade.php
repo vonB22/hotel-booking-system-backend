@@ -44,7 +44,7 @@
                     <div class="col-md-6">
                         <label for="password" class="form-label fw-semibold">Password</label>
                         <input type="password" name="password" id="password" placeholder="Leave blank to keep current password" class="form-control">
-                        <small class="text-muted">Leave empty if you don’t want to change it.</small>
+                        <small class="text-muted">Leave empty if you don&apos;t want to change it.</small>
                     </div>
 
                     <div class="col-md-6">

@@ -70,7 +70,7 @@
                                     </a>
                                     <a class="btn btn-outline-primary btn-sm" href="{{ route('users.edit',$user->id) }}"
                                         title="Edit">
-                                        <i class="fa-solid fa-pen"></i>
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                     <!-- Delete trigger button -->
                                     <button type="button" class="btn btn-outline-danger btn-sm" title="Delete"
