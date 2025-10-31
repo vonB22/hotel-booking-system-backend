@@ -415,7 +415,7 @@
                             </a>
                         </li>
                         <li class="nav-item mb-1">
-                            <a href="{{ url('/') }}" target="_self" class="nav-link">
+                            <a href="{{ route('public.home') }}" target="_blank" rel="noopener" class="nav-link">
                                 <i class="fa-solid fa-globe me-2"></i>View Site
                             </a>
                         </li>

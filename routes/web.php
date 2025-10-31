@@ -15,6 +15,11 @@ Route::get('/', function () {
     return redirect()->route('login'); // or return view('welcome');
 });
 
+// Public landing page (openable by admins to view the site as a guest)
+Route::get('/public', function () {
+    return view('home');
+})->name('public.home');
+
 // Auth routes (login, register, forgot password, etc.)
 Auth::routes();
 
