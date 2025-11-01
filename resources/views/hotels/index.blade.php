@@ -58,9 +58,17 @@
                         @endif
 
                         <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <div class="small text-muted">
-                                <i class="fa-solid fa-star text-warning me-1"></i>
-                                {{ $hotel->rating ?? 'N/A' }} / 5
+                            <div class="small text-muted d-flex align-items-center">
+                                <div class="hotel-rating me-2">
+                                    @for ($s = 1; $s <= 5; $s++)
+                                        @if ($s <= ($hotel->rating ?? 0))
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                        @else
+                                            <i class="fa-regular fa-star text-muted"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <div class="ms-2 small text-muted">{{ $hotel->rating ?? 0 }} / 5</div>
                             </div>
                             <div class="d-flex gap-2">
                                 <a href="{{ route('hotels.show', $hotel->id) }}" class="btn btn-sm btn-outline-info" title="View">

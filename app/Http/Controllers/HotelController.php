@@ -37,10 +37,16 @@ class HotelController extends Controller
             'detail' => 'required|string',
             'price' => 'nullable|numeric',
             'location' => 'nullable|string',
+            'rating' => 'nullable|integer|min:0|max:5',
+            'rooms' => 'nullable|integer|min:0',
+            'amenities' => 'nullable|array',
             'image' => 'nullable|image|max:2048',
         ]);
 
-    $data = $request->only(['name', 'detail', 'price', 'location']);
+    $data = $request->only(['name', 'detail', 'price', 'location', 'rating', 'rooms']);
+    if ($request->filled('amenities') && is_array($request->input('amenities'))) {
+        $data['amenities'] = implode(',', $request->input('amenities'));
+    }
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -76,10 +82,16 @@ class HotelController extends Controller
             'detail' => 'required|string',
             'price' => 'nullable|numeric',
             'location' => 'nullable|string',
+            'rating' => 'nullable|integer|min:0|max:5',
+            'rooms' => 'nullable|integer|min:0',
+            'amenities' => 'nullable|array',
             'image' => 'nullable|image|max:2048',
         ]);
 
-    $data = $request->only(['name', 'detail', 'price', 'location']);
+    $data = $request->only(['name', 'detail', 'price', 'location', 'rating', 'rooms']);
+    if ($request->filled('amenities') && is_array($request->input('amenities'))) {
+        $data['amenities'] = implode(',', $request->input('amenities'));
+    }
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');

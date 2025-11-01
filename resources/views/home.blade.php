@@ -780,7 +780,11 @@
                         @endif
                         <div class="rating-badge">
                             <i class="bi bi-star-fill"></i>
-                            {{-- rating is optional --}}
+                            @if(isset($hotel->rating) && $hotel->rating !== null)
+                                {{ number_format($hotel->rating, 1) }}
+                            @else
+                                N/A
+                            @endif
                         </div>
                     </div>
                     <div class="hotel-card-body">

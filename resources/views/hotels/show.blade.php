@@ -26,13 +26,18 @@
             <!-- Hotel Name and Rating -->
             <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
                 <h3 class="fw-bold mb-0 text-dark">{{ $hotel->name }}</h3>
-                @if(!empty($hotel->rating))
-                    <div>
-                        <span class="badge bg-warning text-dark">
-                            {{ str_repeat('⭐', $hotel->rating) }}
-                        </span>
+                <div class="d-flex align-items-center">
+                    <div class="me-2">
+                        @for ($s = 1; $s <= 5; $s++)
+                            @if ($s <= ($hotel->rating ?? 0))
+                                <i class="fa-solid fa-star text-warning"></i>
+                            @else
+                                <i class="fa-regular fa-star text-muted"></i>
+                            @endif
+                        @endfor
                     </div>
-                @endif
+                    <div class="small text-muted">{{ $hotel->rating ?? 0 }} / 5</div>
+                </div>
             </div>
 
             <!-- Location and Price -->
@@ -74,7 +79,10 @@
                 <h6 class="fw-semibold text-primary">Hotel Info</h6>
                 <ul class="list-unstyled text-muted mb-0">
                     <li><i class="fa-solid fa-bed me-2 text-primary"></i> Available Rooms: {{ $hotel->rooms ?? 'N/A' }}</li>
-                    <li><i class="fa-solid fa-star me-2 text-warning"></i> Rating: {{ $hotel->rating ?? 'N/A' }} / 5</li>
+                    <li>
+                        <i class="fa-solid fa-star me-2 text-warning"></i>
+                        Rating: <strong>{{ $hotel->rating ?? 0 }}</strong> / 5
+                    </li>
                 </ul>
             </div>
 
