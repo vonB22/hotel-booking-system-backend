@@ -761,94 +761,49 @@
 
         <div class="row">
             @php
-            $hotels = [
-                [
-                    'name' => 'Desert Oasis Resort',
-                    'location' => 'Dubai, UAE',
-                    'price' => 299,
-                    'rating' => 4.8,
-                    'reviews' => 342,
-                    'image' => 'https://images.unsplash.com/photo-1759264244692-34b9ff76e6a0?w=600',
-                    'featured' => true
-                ],
-                [
-                    'name' => 'Sunset Beach Hotel',
-                    'location' => 'Maldives',
-                    'price' => 450,
-                    'rating' => 4.9,
-                    'reviews' => 528,
-                    'image' => 'https://images.unsplash.com/photo-1552858725-693709cc17c7?w=600',
-                    'featured' => false
-                ],
-                [
-                    'name' => 'Mountain View Lodge',
-                    'location' => 'Swiss Alps',
-                    'price' => 380,
-                    'rating' => 4.7,
-                    'reviews' => 215,
-                    'image' => 'https://images.unsplash.com/photo-1632598024410-3d8f24daab57?w=600',
-                    'featured' => true
-                ],
-                [
-                    'name' => 'Urban Luxury Suites',
-                    'location' => 'New York, USA',
-                    'price' => 520,
-                    'rating' => 4.6,
-                    'reviews' => 892,
-                    'image' => 'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=600',
-                    'featured' => false
-                ],
-                [
-                    'name' => 'Tropical Paradise Resort',
-                    'location' => 'Bali, Indonesia',
-                    'price' => 275,
-                    'rating' => 4.8,
-                    'reviews' => 456,
-                    'image' => 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600',
-                    'featured' => true
-                ],
-                [
-                    'name' => 'Historic Grand Hotel',
-                    'location' => 'Paris, France',
-                    'price' => 410,
-                    'rating' => 4.9,
-                    'reviews' => 673,
-                    'image' => 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600',
-                    'featured' => false
-                ],
-            ];
+                // If controller passed hotels, use them. Otherwise fetch latest hotels.
+                $hotels = isset($hotels) ? $hotels : \App\Models\Hotel::latest()->take(6)->get();
             @endphp
 
-            @foreach($hotels as $hotel)
+            @forelse($hotels as $hotel)
+            @php
+                $image = $hotel->image ? asset($hotel->image) : 'https://via.placeholder.com/600x400?text=' . urlencode($hotel->name);
+                $price = isset($hotel->price) ? number_format($hotel->price, 2) : '0.00';
+                $location = $hotel->location ?? '';
+            @endphp
             <div class="col-md-4 mb-4">
                 <div class="card hotel-card">
                     <div class="hotel-card-img-wrapper">
-                        <img src="{{ $hotel['image'] }}" alt="{{ $hotel['name'] }}">
-                        @if($hotel['featured'])
+                        <img src="{{ $image }}" alt="{{ $hotel->name }}">
+                        @if(method_exists($hotel, 'featured') && $hotel->featured)
                         <span class="badge-featured">Featured</span>
                         @endif
                         <div class="rating-badge">
                             <i class="bi bi-star-fill"></i>
-                            {{ $hotel['rating'] }}
+                            {{-- rating is optional --}}
                         </div>
                     </div>
                     <div class="hotel-card-body">
-                        <h5 class="hotel-card-title">{{ $hotel['name'] }}</h5>
+                        <h5 class="hotel-card-title">{{ $hotel->name }}</h5>
                         <div class="hotel-location">
                             <i class="bi bi-geo-alt"></i>
-                            {{ $hotel['location'] }}
+                            {{ $location }}
                         </div>
-                        <div class="hotel-price">${{ $hotel['price'] }}</div>
+                        <div class="hotel-price">${{ $price }}</div>
                         <div class="hotel-price-label">per night</div>
                         <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#bookingModal" 
-                                onclick="setHotelData('{{ $hotel['name'] }}', {{ $hotel['price'] }}, '{{ $hotel['image'] }}')">
+                                onclick="setHotelData('{{ addslashes($hotel->name) }}', {{ $hotel->price ?? 0 }}, '{{ $image }}', {{ $hotel->id }})">
                             Book Now
                         </button>
-                        <div class="hotel-reviews">{{ $hotel['reviews'] }} reviews</div>
+                        <div class="hotel-reviews">&nbsp;</div>
                     </div>
                 </div>
             </div>
-            @endforeach
+            @empty
+            <div class="col-12">
+                <div class="alert alert-info">No hotels available right now. Please check back later.</div>
+            </div>
+            @endforelse
         </div>
 
         <div class="text-center mt-4">
@@ -1146,6 +1101,8 @@
                             <input type="hidden" name="product_id" id="modalProductId" value="">
                             <input type="hidden" name="product_name" id="modalProductName" value="">
                             <input type="hidden" name="price" id="modalProductPriceInput" value="">
+                            <input type="hidden" name="hotel_id" id="modalHotelId" value="">
+                            <input type="hidden" name="hotel_name" id="modalHotelNameInput" value="">
                             <input type="hidden" name="guests" id="modalGuests" value="2">
                             <div class="mb-3">
                                 <label class="form-label">Check-in</label>
@@ -1217,20 +1174,24 @@
 
 <script>
     // Set hotel data in booking modal
-    function setHotelData(name, price, image) {
+    function setHotelData(name, price, image, id) {
         document.getElementById('modalHotelName').textContent = name;
         document.getElementById('modalHotelPrice').textContent = price;
         document.getElementById('modalHotelImage').src = image;
         // populate hidden inputs for booking submission
-        const pid = '';
+        const pid = id || '';
         const pname = name;
         const pprice = price;
         const prodIdInput = document.getElementById('modalProductId');
         const prodNameInput = document.getElementById('modalProductName');
         const prodPriceInput = document.getElementById('modalProductPriceInput');
+        const hotelIdInput = document.getElementById('modalHotelId');
+        const hotelNameInput = document.getElementById('modalHotelNameInput');
         if (prodIdInput) prodIdInput.value = pid;
         if (prodNameInput) prodNameInput.value = pname;
         if (prodPriceInput) prodPriceInput.value = pprice;
+        if (hotelIdInput) hotelIdInput.value = pid;
+        if (hotelNameInput) hotelNameInput.value = pname;
     }
 
     // ensure guests hidden input is set before submit

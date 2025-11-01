@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use App\Models\Product;
+use App\Models\Hotel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,8 +29,8 @@ class BookingController extends Controller
 
     public function create()
     {
-        $products = Product::pluck('name','id');
-        return view('bookings.create', compact('products'));
+    $hotels = Hotel::pluck('name','id');
+    return view('bookings.create', compact('hotels'));
     }
 
     public function store(Request $request)
@@ -48,12 +48,12 @@ class BookingController extends Controller
 
         // If product_id not provided but product_name is, create or find the product
         if (empty($data['product_id']) && $request->filled('product_name')) {
-            $product = Product::firstOrCreate([
+            $hotel = Hotel::firstOrCreate([
                 'name' => $request->input('product_name')
             ], [
                 'detail' => 'Imported from landing page booking'
             ]);
-            $data['product_id'] = $product->id;
+            $data['product_id'] = $hotel->id;
         }
 
         // Compute total price when price provided and dates available
@@ -69,7 +69,7 @@ class BookingController extends Controller
         }
 
         $data['user_id'] = Auth::id();
-        $booking = Booking::create($data);
+    $booking = Booking::create($data);
 
         return redirect()->route('bookings.index')->with('success', 'Booking created successfully');
     }
@@ -85,8 +85,8 @@ class BookingController extends Controller
     {
         $booking = Booking::findOrFail($id);
         $this->authorizeView($booking);
-        $products = Product::pluck('name','id');
-        return view('bookings.edit', compact('booking','products'));
+    $hotels = Hotel::pluck('name','id');
+    return view('bookings.edit', compact('booking','hotels'));
     }
 
     public function update(Request $request, $id)

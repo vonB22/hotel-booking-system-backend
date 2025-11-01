@@ -15,7 +15,7 @@
 							<label class="form-label">Hotel</label>
 							<select name="product_id" class="form-control">
 								<option value="">-- Select Hotel (optional) --</option>
-								@foreach($products as $id => $name)
+								@foreach($hotels as $id => $name)
 								<option value="{{ $id }}" {{ (old('product_id', $booking->product_id) == $id) ? 'selected' : '' }}>{{ $name }}</option>
 								@endforeach
 							</select>

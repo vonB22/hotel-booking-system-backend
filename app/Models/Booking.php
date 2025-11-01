@@ -25,6 +25,13 @@ class Booking extends Model
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        // The bookings table still uses `product_id` as the FK. Return the Hotel model instance.
+        return $this->belongsTo(Hotel::class, 'product_id');
+    }
+
+    public function hotel(): BelongsTo
+    {
+        // alias helper if code expects hotel() relation
+        return $this->belongsTo(Hotel::class, 'product_id');
     }
 }

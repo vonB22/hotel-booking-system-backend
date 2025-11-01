@@ -344,7 +344,7 @@
                 <div class="d-flex align-items-start justify-content-between">
                     <div class="grow">
                         <div class="stat-label">Total Hotels</div>
-                        <div id="statProducts" class="stat-value">
+                        <div id="statHotels" class="stat-value">
                             <div class="skeleton-loader" style="width: 80px;"></div>
                         </div>
                         <div class="stat-meta">
@@ -512,7 +512,7 @@
             
             // Animate stat updates
             animateValue('statUsers', 0, data.users, 800);
-            animateValue('statProducts', 0, data.products, 800);
+            animateValue('statHotels', 0, data.hotels, 800);
             animateValue('statBookings', 0, data.bookings, 800);
             animateValue('statRoles', 0, data.roles, 800);
             
@@ -622,7 +622,7 @@
     // Show error state
     function showError() {
         document.getElementById('statUsers').textContent = '—';
-        document.getElementById('statProducts').textContent = '—';
+    document.getElementById('statHotels').textContent = '—';
         document.getElementById('statBookings').textContent = '—';
         document.getElementById('statRoles').textContent = '—';
     }

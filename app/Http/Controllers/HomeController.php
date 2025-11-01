@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Hotel;
 
 class HomeController extends Controller
 {
@@ -13,7 +14,8 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // Keep auth middleware for most actions but allow the public landing view
+        $this->middleware('auth')->except('publicHome');
     }
 
     /**
@@ -28,6 +30,15 @@ class HomeController extends Controller
             return redirect()->route('overview.index');
         }
 
-        return view('home');
+    return view('home', ['hotels' => Hotel::latest()->take(6)->get()]);
+    }
+
+    /**
+     * Public landing page - returns the same home view but accessible without auth.
+     */
+    public function publicHome()
+    {
+        $hotels = Hotel::latest()->take(6)->get();
+        return view('home', compact('hotels'));
     }
 }

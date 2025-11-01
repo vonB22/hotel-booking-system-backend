@@ -10,8 +10,8 @@
             </h2>
             <p class="text-muted small mb-0">Manage your hotels, edit details, and add new listings.</p>
         </div>
-        @can('product-create')
-            <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm shadow-sm">
+        @can('hotel-create')
+            <a href="{{ route('hotels.create') }}" class="btn btn-primary btn-sm shadow-sm">
                 <i class="fa fa-plus me-1"></i> Add New Hotel
             </a>
         @endcan
@@ -26,17 +26,17 @@
     @endif
 
     @php
-        $i = ($products->currentPage() - 1) * $products->perPage();
+        $i = ($hotels->currentPage() - 1) * $hotels->perPage();
     @endphp
 
     <!-- Hotel Cards Grid -->
     <div class="row g-4">
-        @forelse ($products as $product)
+        @forelse ($hotels as $hotel)
             <div class="col-md-6 col-lg-4">
                 <div class="card shadow-sm border-0 h-100 rounded-3 overflow-hidden hotel-card">
                     <!-- Image -->
-                    @if(!empty($product->image))
-                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}" style="object-fit: cover; height: 180px;">
+                    @if(!empty($hotel->image))
+                        <img src="{{ asset($hotel->image) }}" class="card-img-top" alt="{{ $hotel->name }}" style="object-fit: cover; height: 180px;">
                     @else
                         <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
                             <i class="fa-solid fa-hotel fa-3x text-muted"></i>
@@ -45,13 +45,13 @@
 
                     <!-- Card Body -->
                     <div class="card-body d-flex flex-column p-3">
-                        <h5 class="fw-bold text-dark mb-1">{{ $product->name }}</h5>
-                        <p class="text-muted small mb-2">{{ Str::limit($product->detail, 80) }}</p>
+                        <h5 class="fw-bold text-dark mb-1">{{ $hotel->name }}</h5>
+                        <p class="text-muted small mb-2">{{ Str::limit($hotel->detail, 80) }}</p>
 
-                        @if(!empty($product->price))
+                        @if(!empty($hotel->price))
                             <div class="mb-3">
                                 <span class="fw-semibold text-success">
-                                    <i class="fa-solid fa-dollar-sign me-1"></i>{{ $product->price }}
+                                    <i class="fa-solid fa-dollar-sign me-1"></i>{{ $hotel->price }}
                                 </span>
                                 <span class="text-muted small">/ night</span>
                             </div>
@@ -60,19 +60,19 @@
                         <div class="mt-auto d-flex justify-content-between align-items-center">
                             <div class="small text-muted">
                                 <i class="fa-solid fa-star text-warning me-1"></i>
-                                {{ $product->rating ?? 'N/A' }} / 5
+                                {{ $hotel->rating ?? 'N/A' }} / 5
                             </div>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('products.show', $product->id) }}" class="btn btn-sm btn-outline-info" title="View">
+                                <a href="{{ route('hotels.show', $hotel->id) }}" class="btn btn-sm btn-outline-info" title="View">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
-                                @can('product-edit')
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                @can('hotel-edit')
+                                    <a href="{{ route('hotels.edit', $hotel->id) }}" class="btn btn-sm btn-outline-primary" title="Edit">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
                                 @endcan
-                                @can('product-delete')
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this hotel?');" class="d-inline">
+                                @can('hotel-delete')
+                                    <form action="{{ route('hotels.destroy', $hotel->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this hotel?');" class="d-inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
@@ -90,8 +90,8 @@
                 <div class="alert alert-light border text-center py-5">
                     <i class="fa-solid fa-bed fa-3x text-muted mb-3"></i>
                     <p class="text-muted mb-2">No hotels found.</p>
-                    @can('product-create')
-                        <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm">
+                        @can('hotel-create')
+                        <a href="{{ route('hotels.create') }}" class="btn btn-primary btn-sm">
                             <i class="fa fa-plus me-1"></i> Add Your First Hotel
                         </a>
                     @endcan
@@ -102,7 +102,7 @@
 
     <!-- Pagination -->
     <div class="mt-4">
-        {!! $products->links() !!}
+        {!! $hotels->links() !!}
     </div>
 </div>
 

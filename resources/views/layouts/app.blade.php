@@ -403,8 +403,8 @@
                             </a>
                         </li>
                         <li class="nav-item mb-1">
-                            <a href="{{ route('products.index') }}"
-                                class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}">
+                            <a href="{{ route('hotels.index') }}"
+                                class="nav-link {{ request()->routeIs('hotels.*') ? 'active' : '' }}">
                                 <i class="fa-solid fa-hotel me-2"></i>Hotels
                             </a>
                         </li>
@@ -472,6 +472,7 @@
             });
         });
     </script>
+
     <script>
         /* Page loader controller */
         (function () {
