@@ -102,7 +102,7 @@
 
     <!-- Pagination -->
     <div class="mt-4">
-        {!! $hotels->links() !!}
+        {!! $hotels->links('vendor.pagination.custom') !!}
     </div>
 </div>
 
