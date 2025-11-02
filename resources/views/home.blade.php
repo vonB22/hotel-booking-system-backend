@@ -761,8 +761,6 @@
 
         <div class="row">
             @php
-                // If controller passed hotels, use them. Otherwise fetch latest hotels.
-                // Increase the fallback to fetch more than 6 so the "See all" toggle has items to reveal.
                 $hotels = isset($hotels) ? $hotels : \App\Models\Hotel::latest()->take(12)->get();
             @endphp
 
@@ -775,7 +773,14 @@
             <div class="col-md-4 mb-4 @if(isset($loop) && $loop->index >= 6) extra-hotel d-none @endif">
                 <div class="card hotel-card">
                     <div class="hotel-card-img-wrapper">
-                        <img src="{{ $image }}" alt="{{ $hotel->name }}">
+                        <!-- <img src="{{ $image }}" alt="{{ $hotel->name }}"> -->
+                        @if(!empty($hotel->image))
+                            <img src="{{ asset($hotel->image) }}" class="card-img-top" alt="{{ $hotel->name }}" style="object-fit: cover; height: 320px;">
+                        @else
+                            <div class="bg-light d-flex justify-content-center align-items-center" style="height: 320px;">
+                                <i class="fa-solid fa-hotel fa-4x text-muted"></i>
+                            </div>
+                        @endif
                         @if(method_exists($hotel, 'featured') && $hotel->featured)
                         <span class="badge-featured">Featured</span>
                         @endif
@@ -1089,7 +1094,14 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <img id="modalHotelImage" src="" alt="Hotel" class="img-fluid rounded" style="height: 300px; width: 100%; object-fit: cover;">
+                        <!-- <img id="modalHotelImage" src="" alt="Hotel" class="img-fluid rounded" style="height: 300px; width: 100%; object-fit: cover;"> -->
+                         @if(!empty($hotel->image))
+                            <img id="modalHotelImage" src="" class="img-fluid rounded" alt="Hotel" style="height: 300px; width: 100%; object-fit: cover;">
+                        @else
+                            <div class="bg-light d-flex justify-content-center align-items-center" style="height: 300px; width: 100%; object-fit: cover;">
+                                <i class="fa-solid fa-hotel fa-4x text-muted"></i>
+                            </div>
+                        @endif
                     </div>
                     <div class="col-md-6">
                         <h4 id="modalHotelName" class="mb-3"></h4>
