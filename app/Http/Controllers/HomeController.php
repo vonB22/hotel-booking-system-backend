@@ -30,7 +30,7 @@ class HomeController extends Controller
             return redirect()->route('overview.index');
         }
 
-    return view('home', ['hotels' => Hotel::latest()->take(6)->get()]);
+        return view('home', ['hotels' => Hotel::latest()->take(12)->get()]);
     }
 
     /**
@@ -38,7 +38,7 @@ class HomeController extends Controller
      */
     public function publicHome()
     {
-        $hotels = Hotel::latest()->take(6)->get();
+        $hotels = Hotel::latest()->take(12)->get();
         return view('home', compact('hotels'));
     }
 }

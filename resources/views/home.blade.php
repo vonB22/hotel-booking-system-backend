@@ -762,7 +762,8 @@
         <div class="row">
             @php
                 // If controller passed hotels, use them. Otherwise fetch latest hotels.
-                $hotels = isset($hotels) ? $hotels : \App\Models\Hotel::latest()->take(6)->get();
+                // Increase the fallback to fetch more than 6 so the "See all" toggle has items to reveal.
+                $hotels = isset($hotels) ? $hotels : \App\Models\Hotel::latest()->take(12)->get();
             @endphp
 
             @forelse($hotels as $hotel)
@@ -771,7 +772,7 @@
                 $price = isset($hotel->price) ? number_format($hotel->price, 2) : '0.00';
                 $location = $hotel->location ?? '';
             @endphp
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4 @if(isset($loop) && $loop->index >= 6) extra-hotel d-none @endif">
                 <div class="card hotel-card">
                     <div class="hotel-card-img-wrapper">
                         <img src="{{ $image }}" alt="{{ $hotel->name }}">
@@ -810,8 +811,8 @@
             @endforelse
         </div>
 
-        <div class="text-center mt-4">
-            <button class="btn btn-outline-primary btn-lg">View All Hotels</button>
+        <div class="text-center mt-4 d-flex justify-content-center gap-3">
+            <button id="toggleHotelsBtn" class="btn btn-primary btn-lg">See all</button>
         </div>
     </div>
 </section>
@@ -1225,6 +1226,28 @@
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // See all / See less toggle for featured hotels
+    document.addEventListener('DOMContentLoaded', function(){
+        const toggleBtn = document.getElementById('toggleHotelsBtn');
+        if (!toggleBtn) return;
+        const extras = Array.from(document.querySelectorAll('.extra-hotel'));
+        let expanded = false;
+
+        toggleBtn.addEventListener('click', function(e){
+            e.preventDefault();
+            expanded = !expanded;
+            extras.forEach(el => {
+                el.classList.toggle('d-none', !expanded);
+            });
+            toggleBtn.textContent = expanded ? 'See less' : 'See all';
+            // smooth scroll to top of hotels section when collapsing
+            if (!expanded) {
+                const hotelsSection = document.getElementById('hotels');
+                if (hotelsSection) hotelsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
