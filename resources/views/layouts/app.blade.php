@@ -249,7 +249,7 @@
 
         .navbar-actions .nav-link {
             font-weight: 600;
-            color: var(--text-primary) !important;
+            color: var(--light-bg) !important;
             padding: 0.5rem 1rem;
             transition: var(--transition);
         }
