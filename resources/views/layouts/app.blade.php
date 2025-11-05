@@ -86,7 +86,7 @@
         }
 
         /* ============================================
-           PREMIUM NAVBAR STYLES
+           NAVBAR STYLES
         ============================================ */
         .navbar {
             position: fixed;
@@ -126,7 +126,6 @@
             max-width: 100%;
         }
 
-        /* Brand - Premium Design */
         .navbar-brand {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
@@ -142,6 +141,7 @@
             gap: 0.625rem;
             position: relative;
             cursor: pointer;
+            text-decoration: none;
         }
 
         .navbar-brand:hover {
@@ -155,22 +155,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); */
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
             border-radius: 10px;
-            color: white;
             font-size: 1.25rem;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .navbar-brand-icon i {
+            color: #ffffff !important;
+            position: relative;
+            z-index: 1;
         }
 
         .navbar-brand-icon::before {
             content: '';
             position: absolute;
             inset: 0;
-            /* background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.2) 100%); */
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.2) 100%);
             transform: translateX(-100%);
             transition: transform 0.6s ease;
+            z-index: 0;
         }
 
         .navbar-brand:hover .navbar-brand-icon::before {
@@ -197,6 +204,7 @@
             transition: var(--transition);
             position: relative;
             white-space: nowrap;
+            text-decoration: none;
         }
 
         .navbar-center .nav-link::before {
@@ -249,9 +257,10 @@
 
         .navbar-actions .nav-link {
             font-weight: 600;
-            color: var(--light-bg) !important;
+            color: var(--text-primary) !important;
             padding: 0.5rem 1rem;
             transition: var(--transition);
+            text-decoration: none;
         }
 
         .navbar-actions .nav-link:hover {
@@ -269,6 +278,8 @@
             position: relative;
             overflow: hidden;
             color: white !important;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .btn-primary::before {
@@ -371,6 +382,7 @@
             border-radius: 10px;
             transition: var(--transition);
             cursor: pointer;
+            text-decoration: none;
         }
 
         .dropdown-item:hover {
@@ -508,6 +520,7 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            text-decoration: none;
         }
 
         aside .nav-link::before {
@@ -758,72 +771,242 @@
         }
 
         /* ============================================
-           PAGE LOADER
+           LOADING ANIMATION - GLASS EFFECT
         ============================================ */
         .page-loader {
             position: fixed;
             inset: 0;
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.96) 100%);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             z-index: 99999;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-loader::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.03) 0%, 
+                rgba(139, 92, 246, 0.05) 50%, 
+                rgba(236, 72, 153, 0.03) 100%);
+            pointer-events: none;
         }
 
         .page-loader.show {
+            display: flex;
             opacity: 1;
-            visibility: visible;
         }
 
-        .page-loader-inner {
-            text-align: center;
-            max-width: 400px;
-            width: calc(100% - 3rem);
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
+        /* Loader Container - Glass Card */
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        .loader-brand i {
-            font-size: 3rem;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .loader-spinner {
-            width: 60px;
-            height: 60px;
+        /* Outer Rotating Ring */
+        .loader-ring-outer {
+            position: absolute;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--primary-light);
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
             border-right-color: var(--secondary);
-            animation: spin 1s linear infinite;
-            margin: 1.5rem auto;
+            animation: spin-outer 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        /* Inner Rotating Ring */
+        .loader-ring-inner {
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-bottom-color: var(--accent);
+            border-left-color: var(--secondary);
+            animation: spin-inner 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(0.95); }
+        /* Center Logo Icon */
+        .loader-logo {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+            animation: pulse-logo 2s ease-in-out infinite;
         }
 
+        .loader-logo i {
+            color: white;
+            font-size: 1.25rem;
+            animation: bounce-icon 1.5s ease-in-out infinite;
+        }
+
+        /* Orbiting Dots */
+        .loader-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+            animation: orbit-dot 2s linear infinite;
+        }
+
+        .loader-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loader-dot:nth-child(2) {
+            animation-delay: -0.5s;
+        }
+
+        .loader-dot:nth-child(3) {
+            animation-delay: -1s;
+        }
+
+        .loader-dot:nth-child(4) {
+            animation-delay: -1.5s;
+        }
+
+        /* Loading Text */
         .loader-text {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 500;
-            line-height: 1.6;
+            position: absolute;
+            bottom: -40px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            animation: fade-text 1.5s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        /* Animations */
+        @keyframes spin-outer {
+            0% {
+                transform: rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin-inner {
+            0% {
+                transform: rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(-360deg);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes pulse-logo {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
+            }
+        }
+
+        @keyframes bounce-icon {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        @keyframes orbit-dot {
+            0% {
+                transform: rotate(0deg) translateX(50px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(360deg) translateX(50px) rotate(-360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fade-text {
+            0%, 100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Accessibility: Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .loader-ring-outer,
+            .loader-ring-inner,
+            .loader-dot {
+                animation: pulse-reduced 2s ease-in-out infinite;
+            }
+
+            .loader-logo,
+            .loader-logo i {
+                animation: none;
+            }
+
+            @keyframes pulse-reduced {
+                0%, 100% {
+                    opacity: 0.5;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
         }
 
         /* ============================================
@@ -1015,15 +1198,99 @@
         .fw-semibold {
             font-weight: 600 !important;
         }
+
+        .d-none {
+            display: none !important;
+        }
+
+        .d-inline {
+            display: inline !important;
+        }
+
+        .d-flex {
+            display: flex !important;
+        }
+
+        .justify-content-between {
+            justify-content: space-between !important;
+        }
+
+        .justify-content-end {
+            justify-content: flex-end !important;
+        }
+
+        .align-items-center {
+            align-items: center !important;
+        }
+
+        .mb-0 {
+            margin-bottom: 0 !important;
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem !important;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem !important;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem !important;
+        }
+
+        .me-1 {
+            margin-right: 0.25rem !important;
+        }
+
+        .me-2 {
+            margin-right: 0.5rem !important;
+        }
+
+        .text-end {
+            text-align: right !important;
+        }
+
+        .container {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .container-fluid {
+            width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-3 {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+        }
+
+        .py-5 {
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .p-4 {
+            padding: 1.5rem !important;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
     </style>
 </head>
 
 <body>
     <div id="app">
-        <!-- Premium Navbar -->
+        <!-- Navbar -->
         <nav class="navbar {{ request()->routeIs('login') || request()->routeIs('register') ? 'auth-navbar' : '' }}">
             <div class="navbar-container">
-                <!-- Brand -->
+                <!-- Brand with Fixed Logo -->
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <div class="navbar-brand-icon">
                         <i class="fa-solid fa-hotel"></i>
@@ -1152,7 +1419,7 @@
                     <!-- Other Section -->
                     <div class="sidebar-section">
                         <div class="sidebar-section-title">Other</div>
-                        <a href="{{ route('public.home') }}" target="_blank" rel="noopener" class="nav-link">
+                        <a href="{{ route('public.home') }}" target="_self" rel="noopener" class="nav-link">
                             <i class="fa-solid fa-globe"></i>
                             <span>View Website</span>
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem; margin-left: auto;"></i>
@@ -1263,14 +1530,30 @@
         @endunless
     @endauth
 
-    <!-- Page Loader -->
+    <!-- Loading Animation -->
     <div id="pageLoader" class="page-loader" aria-hidden="true" aria-live="polite">
-        <div class="page-loader-inner" role="status">
-            <div class="loader-brand">
+        <div class="loader-container" role="status" aria-label="Loading">
+            <!-- Outer Ring -->
+            <div class="loader-ring-outer"></div>
+            
+            <!-- Inner Ring -->
+            <div class="loader-ring-inner"></div>
+            
+            <!-- Orbiting Dots -->
+            <div class="loader-dots">
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+            </div>
+            
+            <!-- Center Logo -->
+            <div class="loader-logo">
                 <i class="fa-solid fa-hotel"></i>
             </div>
-            <div class="loader-spinner" aria-hidden="true"></div>
-            <div class="loader-text">Preparing your experience...</div>
+            
+            <!-- Loading Text -->
+            <div class="loader-text">Loading...</div>
         </div>
     </div>
 
@@ -1370,69 +1653,75 @@
             });
         });
 
-        /* Page Loader */
+        /* Simple Page Loader - Fixed */
         (function () {
             const loader = document.getElementById('pageLoader');
             if (!loader) return;
 
-            let active = false;
-
-            function showLoader() {
-                if (active) return;
-                active = true;
-                requestAnimationFrame(() => loader.classList.add('show'));
+            // Hide loader on initial page load
+            function hideLoader() {
+                loader.classList.remove('show');
             }
 
-            function hideLoader() {
-                if (!active) return;
-                active = false;
-                loader.classList.remove('show');
+            function showLoader() {
+                loader.classList.add('show');
             }
 
             function isAuthPath(pathname) {
                 return /(^|\/)\b(login|register)\b(\/|$)/i.test(pathname || '');
             }
 
+            // Hide loader when page is ready
+            if (document.readyState === 'complete') {
+                hideLoader();
+            } else {
+                window.addEventListener('load', hideLoader);
+                document.addEventListener('DOMContentLoaded', hideLoader);
+            }
+
+            // Show loader on navigation clicks
             document.addEventListener('click', (e) => {
                 const a = e.target.closest('a');
                 if (!a) return;
+                
                 const href = a.getAttribute('href');
                 if (!href || href.startsWith('#')) return;
                 if (a.target && a.target !== '' && a.target !== '_self') return;
                 if (a.hasAttribute('download')) return;
+                if (a.hasAttribute('data-skip-loader')) return;
                 
                 let url;
                 try {
                     url = new URL(a.href, location.href);
                     if (url.origin !== location.origin) return;
                     if (url.pathname === location.pathname && url.search === location.search) return;
+                    if (isAuthPath(url.pathname)) return;
                 } catch (err) {
                     return;
                 }
 
-                if (a.hasAttribute('data-skip-loader')) return;
-                if (isAuthPath(url.pathname)) return;
                 showLoader();
             }, { capture: true });
 
+            // Show loader on form submissions
             document.addEventListener('submit', (e) => {
                 const form = e.target;
                 if (!form || !(form instanceof HTMLFormElement)) return;
                 if (form.hasAttribute('data-ajax')) return;
-                
-                let action = form.getAttribute('action') || location.pathname;
                 if (form.hasAttribute('data-skip-loader')) return;
+                
+                const action = form.getAttribute('action') || location.pathname;
                 if (isAuthPath(action)) return;
+                
                 showLoader();
             }, { capture: true });
 
+            // Show loader on page unload
             window.addEventListener('beforeunload', () => {
-                if (isAuthPath(location.pathname)) return;
-                showLoader();
+                if (!isAuthPath(location.pathname)) {
+                    showLoader();
+                }
             });
-
-            window.addEventListener('load', () => setTimeout(hideLoader, 150));
-            document.addEventListener('DOMContentLoaded', () => setTimeout(hideLoader, 100));
         })();
     </script>
     @stack('scripts')
