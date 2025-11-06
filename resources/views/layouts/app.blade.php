@@ -1026,6 +1026,13 @@
             }
         }
 
+        /* Responsive utilities for md breakpoint (used by auth pages) */
+        @media (min-width: 768px) {
+            .d-md-flex { display: flex !important; }
+            .d-md-none { display: none !important; }
+            .d-md-block { display: block !important; }
+        }
+
         @media (max-width: 991px) {
             :root {
                 --navbar-height: 64px;
@@ -1201,6 +1208,13 @@
 
         .d-none {
             display: none !important;
+        }
+
+        /* Ensure responsive md utilities override the base .d-none when combined (source-order) */
+        @media (min-width: 768px) {
+            .d-none.d-md-flex { display: flex !important; }
+            .d-none.d-md-block { display: block !important; }
+            .d-none.d-md-inline { display: inline !important; }
         }
 
         .d-inline {

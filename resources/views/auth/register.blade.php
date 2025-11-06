@@ -5,11 +5,13 @@
     body {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
+        height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
         position: relative;
+        padding: 0.5rem 0;
     }
 
     /* Animated background circles */
@@ -48,8 +50,8 @@
         position: relative;
         z-index: 1;
         width: 100%;
-        max-width: 950px;
-        padding: 1rem;
+        max-width: 1050px;
+        padding: 0.75rem;
     }
 
     .auth-card {
@@ -60,6 +62,8 @@
         overflow: hidden;
         animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         border: 1px solid rgba(255, 255, 255, 0.2);
+        max-height: 98vh;
+        display: flex;
     }
 
     @keyframes slideUp {
@@ -81,7 +85,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 4rem 2.5rem;
+        padding: 2rem 1.75rem;
         position: relative;
         overflow: hidden;
     }
@@ -106,17 +110,18 @@
     }
 
     .logo-icon {
-        width: 80px;
-        height: 80px;
+        width: 60px;
+        height: 60px;
         background: rgba(255, 255, 255, 0.15);
-        border-radius: 20px;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 1.5rem;
+        margin: 0 auto 1rem;
         backdrop-filter: blur(10px);
         border: 2px solid rgba(255, 255, 255, 0.2);
         animation: pulse 3s ease-in-out infinite;
+        font-size: 1.75rem;
     }
 
     @keyframes pulse {
@@ -127,7 +132,7 @@
     .benefit-item {
         display: flex;
         align-items: start;
-        margin-bottom: 1.25rem;
+        margin-bottom: 0.85rem;
         text-align: left;
         animation: slideInLeft 0.5s ease forwards;
         opacity: 0;
@@ -144,36 +149,37 @@
     }
 
     .benefit-icon {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-right: 1rem;
+        margin-right: 0.75rem;
+        font-size: 0.875rem;
     }
 
     .benefit-content h6 {
-        margin: 0 0 0.25rem 0;
-        font-size: 0.95rem;
+        margin: 0 0 0.15rem 0;
+        font-size: 0.875rem;
         font-weight: 600;
     }
 
     .benefit-content p {
         margin: 0;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         opacity: 0.9;
-        line-height: 1.4;
+        line-height: 1.3;
     }
 
     .auth-right {
         background: #fff;
-        padding: 3rem 3rem;
+        padding: 1.75rem 2rem;
         position: relative;
-        max-height: 90vh;
-        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
     }
 
     .auth-right::-webkit-scrollbar {
@@ -196,23 +202,23 @@
         gap: 0.5rem;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.875rem;
         border-radius: 2rem;
-        font-size: 0.875rem;
-        margin-bottom: 1.5rem;
+        font-size: 0.8125rem;
+        margin-bottom: 0.75rem;
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
 
     .form-floating {
         position: relative;
-        margin-bottom: 1.25rem;
+        margin-bottom: 0.75rem;
     }
 
     .form-control {
         border: 2px solid #e5e7eb;
         border-radius: 0.75rem;
-        padding: 1rem 1rem;
-        font-size: 0.95rem;
+        padding: 0.875rem 0.875rem;
+        font-size: 0.875rem;
         transition: all 0.3s ease;
         background: #f9fafb;
     }
@@ -224,9 +230,9 @@
     }
 
     .form-floating label {
-        padding: 1rem 1rem;
+        padding: 0.875rem 0.875rem;
         color: #6b7280;
-        font-size: 0.95rem;
+        font-size: 0.875rem;
     }
 
     .form-control:focus ~ label,
@@ -252,16 +258,16 @@
 
     /* Password Strength Indicator */
     .password-strength {
-        margin-top: 0.5rem;
-        margin-bottom: 0.75rem;
+        margin-top: 0.35rem;
+        margin-bottom: 0.5rem;
     }
 
     .strength-bar {
-        height: 4px;
+        height: 3px;
         background: #e5e7eb;
         border-radius: 2px;
         overflow: hidden;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.35rem;
     }
 
     .strength-fill {
@@ -311,11 +317,21 @@
         box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
     }
 
+    .form-check {
+        margin-bottom: 0.75rem !important;
+        font-size: 0.8125rem;
+    }
+
+    .form-check-label {
+        margin-left: 0.25rem;
+    }
+
     .btn-primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border: none;
-        padding: 0.75rem 2rem;
+        padding: 0.65rem 1.5rem;
         font-weight: 600;
+        font-size: 0.9375rem;
         letter-spacing: 0.3px;
         transition: all 0.3s ease;
         position: relative;
@@ -377,6 +393,9 @@
         border-radius: 0.75rem;
         border: none;
         animation: slideDown 0.3s ease;
+        padding: 0.65rem 0.875rem;
+        font-size: 0.8125rem;
+        margin-bottom: 0.75rem;
     }
 
     @keyframes slideDown {
@@ -394,27 +413,38 @@
         color: #991b1b;
     }
 
+    .alert ul {
+        margin-left: 1rem;
+        margin-bottom: 0;
+        padding-left: 0.5rem;
+    }
+
+    .alert ul li {
+        font-size: 0.75rem;
+        margin-bottom: 0.15rem;
+    }
+
     .requirements-list {
         background: #f9fafb;
         border: 1px solid #e5e7eb;
         border-radius: 0.5rem;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1rem;
-        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.65rem;
+        font-size: 0.75rem;
     }
 
     .requirement-item {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
+        gap: 0.4rem;
+        margin-bottom: 0.15rem;
         color: #6b7280;
         transition: color 0.2s;
     }
 
     .requirement-item i {
-        font-size: 0.75rem;
-        width: 14px;
+        font-size: 0.6875rem;
+        width: 12px;
     }
 
     .requirement-item.met {
@@ -474,19 +504,19 @@
             <div class="col-md-5 auth-left d-none d-md-flex">
                 <div class="auth-left-content">
                     <div class="logo-icon">
-                        <i class="fa-solid fa-hotel fa-3x"></i>
+                        <i class="fa-solid fa-hotel"></i>
                     </div>
-                    <h2 class="fw-bold mb-3">Join StayEase</h2>
-                    <p class="mb-4 opacity-90">Discover and book your ideal stay with ease</p>
+                    <h3 class="fw-bold mb-2" style="font-size: 1.5rem;">Join StayEase</h3>
+                    <p class="mb-3 opacity-90" style="font-size: 0.875rem;">Discover and book your ideal stay with ease</p>
                     
-                    <div class="mt-4">
+                    <div class="mt-2">
                         <div class="benefit-item">
                             <div class="benefit-icon">
                                 <i class="fa-solid fa-rocket"></i>
                             </div>
                             <div class="benefit-content">
-                                <h6>Fast Booking</h6>
-                                <p>Reserve your stay in just a few clicks</p>
+                                <h6>Quick Setup</h6>
+                                <p>Get started in minutes with our intuitive dashboard</p>
                             </div>
                         </div>
 
@@ -496,7 +526,7 @@
                             </div>
                             <div class="benefit-content">
                                 <h6>Secure & Reliable</h6>
-                                <p>Your transactions are protected at all times</p>
+                                <p>Your data is protected with enterprise-grade security</p>
                             </div>
                         </div>
 
@@ -505,8 +535,8 @@
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
                             <div class="benefit-content">
-                                <h6>Exclusive Deals</h6>
-                                <p>Enjoy the best offers and discounts</p>
+                                <h6>Real-time Analytics</h6>
+                                <p>Track bookings and revenue with live insights</p>
                             </div>
                         </div>
 
@@ -516,7 +546,7 @@
                             </div>
                             <div class="benefit-content">
                                 <h6>24/7 Support</h6>
-                                <p>We&apos;re always here to help with your stay</p>
+                                <p>Our team is here to help you succeed</p>
                             </div>
                         </div>
                     </div>
@@ -532,8 +562,8 @@
                     </div>
                 </div>
 
-                <h3 class="fw-bold mb-2 text-dark">Create your account</h3>
-                <p class="text-muted mb-4">Join thousands of hotel managers worldwide</p>
+                <h4 class="fw-bold mb-1 text-dark" style="font-size: 1.35rem;">Create your account</h4>
+                <p class="text-muted mb-2" style="font-size: 0.875rem;">Join thousands of travelers worldwide</p>
 
                 {{-- Status Message --}}
                 @if(session('status'))
@@ -668,13 +698,13 @@
                     </div>
 
                     {{-- Submit Button --}}
-                    <button type="submit" class="btn btn-primary w-100 mb-3 rounded-3" id="registerBtn">
+                    <button type="submit" class="btn btn-primary w-100 mb-2 rounded-3" id="registerBtn">
                         <span class="btn-text">Create Account</span>
                         <i class="fa-solid fa-arrow-right ms-2"></i>
                     </button>
 
                     {{-- Sign In Link --}}
-                    <div class="text-center">
+                    <div class="text-center" style="font-size: 0.875rem;">
                         <span class="text-muted">Already have an account?</span>
                         <a href="{{ route('login') }}" class="text-link ms-1">Sign in</a>
                     </div>
