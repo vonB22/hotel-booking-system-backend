@@ -1321,11 +1321,16 @@
                 <!-- Center Navigation -->
                 @if($showCentered && !$isAdmin)
                 <div class="navbar-center" id="navbarCenter">
-                    <a class="nav-link" href="#home">Home</a>
-                    <a class="nav-link" href="#hotels">Hotels</a>
-                    <a class="nav-link" href="#myBookings">My Bookings</a>
-                    <a class="nav-link" href="#about">About</a>
-                    <a class="nav-link" href="#contact">Contact</a>
+                    {{-- Hide landing anchors when on userbookings page --}}
+                    @unless(request()->routeIs('userbookings.*'))
+                        <a class="nav-link" href="#home">Home</a>
+                        <a class="nav-link" href="#hotels">Hotels</a>
+                        @auth
+                            <a class="nav-link" href="{{ route('userbookings.index') }}">My Bookings</a>
+                        @endauth
+                        <a class="nav-link" href="#about">About</a>
+                        <a class="nav-link" href="#contact">Contact</a>
+                    @endunless
                 </div>
                 @endif
 
@@ -1456,93 +1461,6 @@
             @endif
         </main>
     </div>
-
-    {{-- My Bookings Section --}}
-    @auth
-        @unless($isAdmin)
-            @php
-                $myBookings = \App\Models\Booking::with('hotel')->where('user_id', auth()->id())->latest()->get();
-            @endphp
-            <section id="myBookings">
-                <div class="container py-5">
-                    <div class="card p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                                <h4 class="mb-1 fw-bold">My Bookings</h4>
-                                <p class="text-muted mb-0">Manage your upcoming reservations</p>
-                            </div>
-                            <span class="badge badge-success">{{ $myBookings->count() }} Total</span>
-                        </div>
-
-                        @if($myBookings->count() > 0)
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Hotel</th>
-                                        <th>Check-in</th>
-                                        <th>Check-out</th>
-                                        <th>Guests</th>
-                                        <th>Status</th>
-                                        <th class="text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($myBookings as $booking)
-                                    <tr>
-                                        <td><strong>#{{ $booking->id }}</strong></td>
-                                        <td>{{ optional($booking->hotel)->name ?? ($booking->product_name ?? '—') }}</td>
-                                        <td>{{ $booking->check_in ? \Carbon\Carbon::parse($booking->check_in)->format('M d, Y') : '—' }}</td>
-                                        <td>{{ $booking->check_out ? \Carbon\Carbon::parse($booking->check_out)->format('M d, Y') : '—' }}</td>
-                                        <td>{{ $booking->guests ?? '—' }}</td>
-                                        <td>
-                                            <span class="badge badge-{{ ($booking->status ?? 'pending') === 'confirmed' ? 'success' : 'warning' }}">
-                                                {{ ucfirst($booking->status ?? 'pending') }}
-                                            </span>
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="d-flex justify-content-end gap-2">
-                                                @if(($booking->status ?? 'pending') !== 'confirmed')
-                                                <form action="{{ route('bookings.update', $booking->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="status" value="confirmed">
-                                                    <button type="submit" class="btn btn-sm btn-success">
-                                                        <i class="fa-solid fa-check me-1"></i>Confirm
-                                                    </button>
-                                                </form>
-                                                @endif
-
-                                                <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Cancel this booking?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fa-solid fa-times me-1"></i>Cancel
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        @else
-                        <div class="empty-state">
-                            <i class="fa-solid fa-calendar-xmark fa-3x text-muted"></i>
-                            <h5 class="text-muted mb-2">No bookings yet</h5>
-                            <p class="text-muted mb-4">Start exploring our hotels and make your first reservation!</p>
-                            <a href="#hotels" class="btn btn-primary">
-                                <i class="fa-solid fa-hotel me-2"></i>Browse Hotels
-                            </a>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </section>
-        @endunless
-    @endauth
 
     <!-- Loading Animation -->
     <div id="pageLoader" class="page-loader" aria-hidden="true" aria-live="polite">

@@ -63,15 +63,22 @@ class BookingController extends Controller
                 $checkOut = \Carbon\Carbon::parse($request->input('check_out'));
                 $nights = max(1, $checkOut->diffInDays($checkIn));
                 $data['total_price'] = $nights * floatval($request->input('price'));
-            } catch (\Exception $e) {
-                // ignore calculation errors and leave total_price null
-            }
+            } catch (\Exception $e) {}
         }
 
         $data['user_id'] = Auth::id();
-    $booking = Booking::create($data);
+        $booking = Booking::create($data);
 
-        return redirect()->route('bookings.index')->with('success', 'Booking created successfully');
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'booking_id' => $booking->id,
+                'redirect' => route('userbookings.index')
+            ], 201);
+        }
+
+        // For normal (non-AJAX) requests, redirect regular users to their bookings page.
+        return redirect()->route('userbookings.index')->with('success', 'Booking created successfully');
     }
 
     public function show($id)
@@ -120,5 +127,47 @@ class BookingController extends Controller
         if (method_exists($user, 'hasRole') && $user->hasRole('Admin')) return true;
         if ($booking->user_id === $user->id) return true;
         abort(403);
+    }
+
+    public function cancel($id)
+    {
+        $booking = Booking::findOrFail($id);
+        
+        // Check if the booking belongs to the authenticated user
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Check if the booking is already cancelled
+        if ($booking->status === 'cancelled') {
+            return redirect()->route('userbookings.index')
+                ->with('error', 'Booking is already cancelled');
+        }
+
+        $booking->update(['status' => 'cancelled']);
+
+        return redirect()->route('userbookings.index')
+            ->with('status', 'Booking has been cancelled successfully');
+    }
+
+    public function confirm($id)
+    {
+        $booking = Booking::findOrFail($id);
+        
+        // Check if the booking belongs to the authenticated user
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Check if the booking is in a state that can be confirmed
+        if ($booking->status !== 'pending') {
+            return redirect()->route('userbookings.index')
+                ->with('error', 'Only pending bookings can be confirmed');
+        }
+
+        $booking->update(['status' => 'confirmed']);
+
+        return redirect()->route('userbookings.index')
+            ->with('status', 'Booking has been confirmed successfully');
     }
 }

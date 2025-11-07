@@ -596,6 +596,31 @@
         border: none;
     }
 
+    /* Booking success overlay */
+    #bookingSuccessOverlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0,0,0,0.6);
+        z-index: 2000;
+    }
+    #bookingSuccessOverlay .box {
+        background: #fff;
+        padding: 28px 30px;
+        border-radius: 12px;
+        text-align: center;
+        width: 320px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    #bookingSuccessOverlay .check {
+        font-size: 48px;
+        color: #28a745;
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
     .modal-header {
         border-bottom: 1px solid #f0f0f0;
         padding: 1.5rem;
@@ -1113,7 +1138,7 @@
                             <small class="text-muted">per night</small>
                         </div>
                         @auth
-                        <form action="{{ route('bookings.store') }}" method="POST" id="landingBookingForm">
+                        <form action="{{ route('userbookings.store') }}" method="POST" id="landingBookingForm">
                             @csrf
                             <input type="hidden" name="product_id" id="modalProductId" value="">
                             <input type="hidden" name="product_name" id="modalProductName" value="">
@@ -1189,6 +1214,15 @@
     </div>
 </div>
 
+                <!-- Booking success overlay -->
+                <div id="bookingSuccessOverlay" aria-hidden="true">
+                    <div class="box">
+                        <div class="check">✓</div>
+                        <h4 style="margin-bottom:6px;">Booking Confirmed</h4>
+                        <p class="text-muted" style="margin-bottom:0;">Redirecting to your bookings...</p>
+                    </div>
+                </div>
+
 <script>
     // Set hotel data in booking modal
     function setHotelData(name, price, image, id) {
@@ -1212,16 +1246,80 @@
     }
 
     // ensure guests hidden input is set before submit
+    // ensure guests hidden input is set before submit and submit via AJAX
     document.addEventListener('DOMContentLoaded', function(){
         const form = document.getElementById('landingBookingForm');
         if (!form) return;
-        form.addEventListener('submit', function(e){
+
+        async function showBookingSuccess() {
+            const overlay = document.getElementById('bookingSuccessOverlay');
+            if (!overlay) return;
+            overlay.style.display = 'flex';
+        }
+
+        form.addEventListener('submit', async function(e){
+            e.preventDefault();
+
+            // compute guests value
             const adults = parseInt(document.getElementById('modalAdults')?.value || '0', 10);
             const kids = parseInt(document.getElementById('modalKids')?.value || '0', 10);
             const guests = Math.max(1, (isNaN(adults) ? 0 : adults) + (isNaN(kids) ? 0 : kids));
             const guestsInput = document.getElementById('modalGuests');
             if (guestsInput) guestsInput.value = guests;
-            // allow form to submit normally (will require auth)
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            let originalBtnHtml = null;
+            if (submitBtn) {
+                originalBtnHtml = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Booking...';
+            }
+
+            const url = "{{ route('userbookings.store') }}";
+            const redirectUrl = "{{ route('userbookings.index') }}";
+
+            const formData = new FormData(form);
+
+            try {
+                const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+                const csrf = tokenMeta ? tokenMeta.getAttribute('content') : '{{ csrf_token() }}';
+
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': csrf
+                    },
+                    body: formData
+                });
+
+                if (!res.ok) {
+                    // try to parse JSON error, otherwise show text
+                    let msg = 'Booking failed. Please try again.';
+                    try {
+                        const data = await res.json();
+                        if (data.message) msg = data.message;
+                        else if (data.errors) msg = Object.values(data.errors).flat().join('; ');
+                    } catch (er) {
+                        const txt = await res.text();
+                        if (txt) msg = txt;
+                    }
+                    alert(msg);
+                    if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHtml; }
+                    return;
+                }
+
+                // success: show overlay then redirect to userbookings
+                await showBookingSuccess();
+                setTimeout(function(){
+                    window.location.href = redirectUrl;
+                }, 1100);
+
+            } catch (err) {
+                alert('Booking error: ' + (err.message || err));
+                if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalBtnHtml; }
+            }
+
         });
     });
 

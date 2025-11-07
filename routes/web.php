@@ -30,7 +30,28 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
     // Hotel CRUD
     Route::resource('hotels', HotelController::class);
-    Route::resource('bookings', App\Http\Controllers\BookingController::class);
+    // Bookings resource: restrict full CRUD to users that can manage bookings (admins/staff).
+    // Regular authenticated users will use the `userbookings` view (read-only for their own bookings).
+    Route::resource('bookings', App\Http\Controllers\BookingController::class)
+        ->middleware('can:manage bookings');
+
+    // Provide a simple, authenticated route for users to view their own bookings (read-only).
+    Route::get('userbookings', function () {
+        $bookings = auth()->user() ? auth()->user()->bookings()->latest()->get() : collect();
+        return view('userbookings.index', compact('bookings'));
+    })->name('userbookings.index');
+
+    // Allow users to cancel their own bookings
+    Route::patch('userbookings/{booking}/cancel', [App\Http\Controllers\BookingController::class, 'cancel'])
+        ->name('userbookings.cancel');
+    // Allow authenticated users to create bookings via the landing page (AJAX/post).
+    // This uses the same BookingController@store but does NOT require the "manage bookings" permission.
+    Route::post('userbookings', [App\Http\Controllers\BookingController::class, 'store'])
+        ->name('userbookings.store');
+    
+    // Allow users to confirm their own bookings
+    Route::patch('userbookings/{booking}/confirm', [App\Http\Controllers\BookingController::class, 'confirm'])
+        ->name('userbookings.confirm');
     // Overview dashboard for admins
     Route::get('overview', [App\Http\Controllers\OverviewController::class, 'index'])->name('overview.index');
     Route::get('overview/stats', [App\Http\Controllers\OverviewController::class, 'stats'])->name('overview.stats');

@@ -18,6 +18,12 @@ class AssignHotelPermissionsToAdminSeeder extends Seeder
             'hotel-create',
             'hotel-edit',
             'hotel-delete',
+            // bookings
+            'manage bookings',
+            'booking-list',
+            'booking-create',
+            'booking-edit',
+            'booking-delete',
         ];
 
         foreach ($permissions as $perm) {
