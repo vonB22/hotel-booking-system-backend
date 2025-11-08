@@ -15,9 +15,29 @@
         padding-top: 0 !important;
     }
     
-    /* section {
+    /* Override layout styles for full-width sections */
+    main section {
         padding: 0 !important;
-    } */
+        margin: 0 !important;
+        width: 100vw !important;
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        box-sizing: border-box !important;
+    }
+    
+    main .container, 
+    main .container-fluid {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+    
+    @media (max-width: 768px) {
+        main .container,
+        main .container-fluid {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+    }
 
     /* Hero Section */
     .hero {
@@ -216,7 +236,7 @@
 
     /* Featured Section */
     .featured-section {
-        padding: 5rem 0;
+        padding: 5rem 0 !important;
         background: #f8f9fa;
     }
 
@@ -323,7 +343,7 @@
     /* Reviews Section */
     .reviews-section {
         background: white;
-        padding: 5rem 0;
+        padding: 5rem 0 !important;
     }
 
     .review-card {
@@ -392,7 +412,7 @@
     /* Newsletter Section */
     .newsletter-section {
         background: #f8f9fa;
-        padding: 4rem 0;
+        padding: 4rem 0 !important;
     }
 
     .newsletter-box {
@@ -431,7 +451,7 @@
 
     /* About Section */
     .about-section {
-        padding: 5rem 0;
+        padding: 5rem 0 !important;
         background: white;
     }
 
@@ -483,7 +503,7 @@
 
     /* Contact Section */
     .contact-section {
-        padding: 5rem 0;
+        padding: 5rem 0 !important;
         background: #f8f9fa;
     }
 
@@ -533,7 +553,9 @@
         padding: 2rem 0 1rem;
         width: 100vw;
         margin-left: calc(50% - 50vw);
+        margin-bottom: 0;
         box-sizing: border-box;
+        position: relative;
     }
 
     footer h5 {
@@ -1107,7 +1129,6 @@
     </div>
 </footer>
 
-
 <!-- Booking Modal -->
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -1214,14 +1235,14 @@
     </div>
 </div>
 
-                <!-- Booking success overlay -->
-                <div id="bookingSuccessOverlay" aria-hidden="true">
-                    <div class="box">
-                        <div class="check">✓</div>
-                        <h4 style="margin-bottom:6px;">Booking Confirmed</h4>
-                        <p class="text-muted" style="margin-bottom:0;">Redirecting to your bookings...</p>
-                    </div>
-                </div>
+<!-- Booking success overlay -->
+<div id="bookingSuccessOverlay" aria-hidden="true">
+    <div class="box">
+        <div class="check">✓</div>
+        <h4 style="margin-bottom:6px;">Booking Confirmed</h4>
+        <p class="text-muted" style="margin-bottom:0;">Redirecting to your bookings...</p>
+    </div>
+</div>
 
 <script>
     // Set hotel data in booking modal

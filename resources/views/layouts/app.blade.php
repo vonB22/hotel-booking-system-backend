@@ -1,5 +1,8 @@
+@php
+$isAuthPage = request()->routeIs('login') || request()->routeIs('register');
+@endphp
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $isAuthPage ? 'auth-page' : '' }}">
 
 <head>
     <meta charset="utf-8">
@@ -17,6 +20,24 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    @vite(['resources/js/app.js'])
+    @if($isAuthPage)
+        <style>
+            body {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                position: relative;
+                padding: 0.5rem 0;
+                margin: 0;
+            }
+        </style>
+    @endif
 
     <style>
         :root {
@@ -131,10 +152,7 @@
             font-weight: 700;
             font-size: 1.75rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 60%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
             transition: var(--transition);
             display: flex;
             align-items: center;
@@ -142,6 +160,13 @@
             position: relative;
             cursor: pointer;
             text-decoration: none;
+        }
+
+        .navbar-brand span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 60%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .navbar-brand:hover {
@@ -155,7 +180,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             border-radius: 10px;
             font-size: 1.25rem;
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
@@ -165,9 +190,14 @@
         }
 
         .navbar-brand-icon i {
-            color: #ffffff !important;
+            color: #ffffff;
             position: relative;
             z-index: 1;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
         }
 
         .navbar-brand-icon::before {
@@ -185,7 +215,25 @@
         }
 
         .auth-navbar .navbar-brand {
-            -webkit-text-fill-color: white;
+            color: white;
+        }
+        
+        .auth-navbar .brand-text {
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .auth-navbar .navbar-brand-icon {
+            background: white !important;
+        }
+        
+        .auth-navbar .navbar-brand-icon i {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Center Navigation */
@@ -629,6 +677,12 @@
             min-height: 100vh;
             padding-top: var(--navbar-height);
             transition: var(--transition);
+            /* background: black; */
+        }
+
+        /* Remove top padding for auth pages */
+        .auth-page main {
+            padding-top: 0;
         }
 
         section {
@@ -1301,25 +1355,24 @@
 
 <body>
     <div id="app">
+        @if(!$isAuthPage)
         <!-- Navbar -->
-        <nav class="navbar {{ request()->routeIs('login') || request()->routeIs('register') ? 'auth-navbar' : '' }}">
+        <nav class="navbar">
             <div class="navbar-container">
+                @php
+                $isAdmin = auth()->check() && method_exists(auth()->user(), 'hasRole') && auth()->user()->hasRole('Admin');
+                @endphp
+
                 <!-- Brand with Fixed Logo -->
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <div class="navbar-brand-icon">
                         <i class="fa-solid fa-hotel"></i>
                     </div>
-                    StayEase
+                    <span class="brand-text">StayEase</span>
                 </a>
 
-                @php
-                $hideNav = isset($hideNav) ? $hideNav : (view()->shared('hideNav') ?? false);
-                $showCentered = !$hideNav && !(request()->routeIs('login') || request()->routeIs('register'));
-                $isAdmin = auth()->check() && method_exists(auth()->user(), 'hasRole') && auth()->user()->hasRole('Admin');
-                @endphp
-
                 <!-- Center Navigation -->
-                @if($showCentered && !$isAdmin)
+                @if(!$isAdmin)
                 <div class="navbar-center" id="navbarCenter">
                     {{-- Hide landing anchors when on userbookings page --}}
                     @unless(request()->routeIs('userbookings.*'))
@@ -1337,16 +1390,12 @@
                 <!-- Right Actions -->
                 <div class="navbar-actions">
                     @guest
-                        @if (Route::has('login') && empty($hideNav))
                         <a data-skip-loader="true" class="nav-link" href="{{ route('login') }}">
                             Login
                         </a>
-                        @endif
-                        @if (Route::has('register') && empty($hideNav))
                         <a data-skip-loader="true" class="btn btn-primary" href="{{ route('register') }}">
                             Sign Up
                         </a>
-                        @endif
                     @else
                     <div class="user-dropdown">
                         <div class="user-dropdown-toggle" id="userDropdown">
@@ -1368,7 +1417,7 @@
                     @endguest
 
                     <!-- Mobile Toggle -->
-                    @if($showCentered && !$isAdmin)
+                    @if(!$isAdmin)
                     <button class="navbar-toggler" id="navbarToggle">
                         <span></span>
                         <span></span>
@@ -1378,6 +1427,7 @@
                 </div>
             </div>
         </nav>
+        @endif
 
         <!-- Main Content -->
         <main>

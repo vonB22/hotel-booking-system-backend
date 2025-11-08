@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="row g-0">
+            <!-- Content will go here -->
+        </div>
+    </div>
+</div>
+
 <style>
     body {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
