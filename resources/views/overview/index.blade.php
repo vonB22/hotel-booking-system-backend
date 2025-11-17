@@ -293,6 +293,228 @@
         background: rgba(239, 68, 68, 0.1);
         color: #dc2626;
     }
+
+    .chart-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .chart-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .chart-header {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        border-bottom: 2px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chart-header h5 {
+        margin: 0;
+        font-weight: 700;
+        color: #111827;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .chart-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .chart-card.status-chart .chart-icon {
+        background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(102, 126, 234, 0.15));
+        color: #667eea;
+    }
+
+    .chart-card.trend-chart .chart-icon {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(102, 126, 234, 0.15));
+        color: #10b981;
+    }
+
+    .chart-badge {
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        border-radius: 6px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .chart-container {
+        padding: 2rem 1.5rem;
+        position: relative;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(249, 250, 251, 0.8) 100%);
+    }
+
+    .chart-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+    }
+
+    .chart-container canvas {
+        max-height: 100%;
+    }
+
+    .chart-footer {
+        padding: 1rem 1.5rem;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        font-size: 0.875rem;
+        color: #6b7280;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chart-footer-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .chart-footer-stat strong {
+        color: #111827;
+        font-weight: 600;
+    }
+
+    .chart-loading {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .chart-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(102, 126, 234, 0.2);
+        border-top-color: #667eea;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .chart-stat-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        background: rgba(16, 185, 129, 0.1);
+        color: #059669;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .chart-stat-badge.trend-up i {
+        animation: slideUp 0.6s ease-in-out;
+    }
+
+    @keyframes slideUp {
+        0% { transform: translateY(3px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .chart-card.no-data {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chart-no-data-state {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+    }
+
+    .chart-no-data-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .chart-responsive-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    @media (max-width: 768px) {
+        .chart-container {
+            min-height: 250px;
+            padding: 1.5rem 1rem;
+        }
+
+        .chart-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .chart-footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .chart-header h5 {
+            font-size: 1rem;
+        }
+    }
+
+    /* Chart Animation on Load */
+    @keyframes chartFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .chart-card {
+        animation: chartFadeIn 0.5s ease-out;
+    }
+
+    /* Enhanced Chart.js Styling */
+    .chartjs-tooltip {
+        background: rgba(0, 0, 0, 0.95) !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
 </style>
 
 <div class="container-fluid px-4">
@@ -400,6 +622,69 @@
         </div>
     </div>
 
+    <!-- Charts Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-6">
+            <div class="chart-card status-chart">
+                <div class="chart-header">
+                    <h5>
+                        <div class="chart-icon">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        Booking Status Distribution
+                    </h5>
+                    <span class="chart-badge" id="statusChartBadge">Live</span>
+                </div>
+                <div class="chart-container" id="statusChartContainer">
+                    <div class="chart-loading">
+                        <div class="chart-spinner"></div>
+                        <span>Loading chart...</span>
+                    </div>
+                </div>
+                <div class="chart-footer" id="statusChartFooter">
+                    <div class="chart-footer-stat">
+                        <i class="fa-solid fa-calendar"></i>
+                        <span>Total Bookings: <strong id="totalBookingsDisplay">0</strong></span>
+                    </div>
+                    <div class="chart-stat-badge trend-up">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        <span id="statusTrendDisplay">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="chart-card trend-chart">
+                <div class="chart-header">
+                    <h5>
+                        <div class="chart-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        Monthly Bookings Trend
+                    </h5>
+                    <span class="chart-badge" id="trendChartBadge">Live</span>
+                </div>
+                <div class="chart-container" id="trendChartContainer">
+                    <div class="chart-loading">
+                        <div class="chart-spinner"></div>
+                        <span>Loading chart...</span>
+                    </div>
+                </div>
+                <div class="chart-footer" id="trendChartFooter">
+                    <div class="chart-footer-stat">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>This Year: <strong id="yearBookingsDisplay">0</strong></span>
+                    </div>
+                    <div class="chart-stat-badge">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <span id="trendAverageDisplay">Avg: 0/mo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Recent Bookings Section -->
     <div class="row">
         <div class="col-12 col-lg-8">
@@ -478,10 +763,13 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
 <script>
 (function(){
     const statsUrl = "{{ route('overview.stats') }}";
     let isRefreshing = false;
+    let bookingStatusChart = null;
+    let monthlyBookingsChart = null;
 
     // Update date and time
     function updateDateTime() {
@@ -517,6 +805,10 @@
             animateValue('statRoles', 0, data.roles, 800);
             
             document.getElementById('statBookingsPending').textContent = data.bookings_pending;
+
+            // Update charts
+            updateBookingStatusChart(data);
+            updateMonthlyBookingsChart(data);
 
             // Fetch recent bookings
             await fetchRecentBookings();
@@ -627,11 +919,234 @@
         document.getElementById('statRoles').textContent = '—';
     }
 
+    // Initialize Booking Status Chart
+    function initBookingStatusChart() {
+        const container = document.getElementById('statusChartContainer');
+        if (!container || container.querySelector('canvas')) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.id = 'bookingStatusChart';
+        container.innerHTML = '';
+        container.appendChild(canvas);
+
+        bookingStatusChart = new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],
+                datasets: [{
+                    data: [0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(239, 68, 68, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(245, 158, 11, 1)',
+                        'rgba(16, 185, 129, 1)',
+                        'rgba(102, 126, 234, 1)',
+                        'rgba(239, 68, 68, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    hoverOffset: 12,
+                    hoverBorderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: { size: 12, weight: '500' },
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            color: '#6b7280',
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                return data.labels.map((label, i) => ({
+                                    text: label,
+                                    fillStyle: data.datasets[0].backgroundColor[i],
+                                    hidden: false,
+                                    index: i
+                                }));
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                        titleColor: '#fff',
+                        bodyColor: '#e5e7eb',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
+                                return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Update Booking Status Chart
+    function updateBookingStatusChart(data) {
+        if (!bookingStatusChart) {
+            initBookingStatusChart();
+        }
+
+        if (bookingStatusChart && data.booking_status) {
+            const statusData = [
+                data.booking_status.pending || 0,
+                data.booking_status.confirmed || 0,
+                data.booking_status.completed || 0,
+                data.booking_status.cancelled || 0
+            ];
+
+            bookingStatusChart.data.datasets[0].data = statusData;
+            bookingStatusChart.update('active');
+
+            // Update footer stats
+            const total = statusData.reduce((a, b) => a + b, 0);
+            document.getElementById('totalBookingsDisplay').textContent = total;
+
+            // Calculate trend (percentage of confirmed/completed)
+            const completed = (statusData[1] + statusData[2]);
+            const trendPercentage = total > 0 ? ((completed / total) * 100).toFixed(0) : 0;
+            document.getElementById('statusTrendDisplay').textContent = trendPercentage + '%';
+        }
+    }
+
+    // Initialize Monthly Bookings Chart
+    function initMonthlyBookingsChart() {
+        const container = document.getElementById('trendChartContainer');
+        if (!container || container.querySelector('canvas')) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.id = 'monthlyBookingsChart';
+        container.innerHTML = '';
+        container.appendChild(canvas);
+
+        monthlyBookingsChart = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Bookings',
+                    data: Array(12).fill(0),
+                    backgroundColor: [
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.75)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.75)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.75)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.75)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.75)',
+                        'rgba(102, 126, 234, 0.8)',
+                        'rgba(102, 126, 234, 0.75)'
+                    ],
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    hoverBackgroundColor: 'rgba(102, 126, 234, 1)',
+                    borderSkipped: false,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                indexAxis: undefined,
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(17, 24, 39, 0.95)',
+                        titleColor: '#fff',
+                        bodyColor: '#e5e7eb',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.parsed.y} bookings`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false,
+                            lineWidth: 1
+                        },
+                        ticks: {
+                            color: '#9ca3af',
+                            font: { size: 12, weight: '500' },
+                            stepSize: 1,
+                            padding: 8
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: '#9ca3af',
+                            font: { size: 12, weight: '500' },
+                            padding: 8
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Update Monthly Bookings Chart
+    function updateMonthlyBookingsChart(data) {
+        if (!monthlyBookingsChart) {
+            initMonthlyBookingsChart();
+        }
+
+        if (monthlyBookingsChart && data.monthly_bookings) {
+            monthlyBookingsChart.data.datasets[0].data = data.monthly_bookings;
+            monthlyBookingsChart.update('active');
+
+            // Update footer stats
+            const total = data.monthly_bookings.reduce((a, b) => a + b, 0);
+            const average = (total / 12).toFixed(1);
+            document.getElementById('yearBookingsDisplay').textContent = total;
+            document.getElementById('trendAverageDisplay').textContent = `Avg: ${average}/mo`;
+        }
+    }
+
     // Event listeners
     document.getElementById('refreshStats').addEventListener('click', fetchStats);
 
     // Initial load
     updateDateTime();
+    initBookingStatusChart();
+    initMonthlyBookingsChart();
     fetchStats();
     
     // Update time every minute
