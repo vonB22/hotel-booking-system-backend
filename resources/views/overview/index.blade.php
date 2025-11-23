@@ -795,16 +795,27 @@
         
         try{
             const res = await fetch(statsUrl, { headers: { 'Accept': 'application/json' } });
-            if(!res.ok) throw new Error('Network error');
+            if(!res.ok) throw new Error('Network error: ' + res.status);
             const data = await res.json();
             
-            // Animate stat updates
-            animateValue('statUsers', 0, data.users, 800);
-            animateValue('statHotels', 0, data.hotels, 800);
-            animateValue('statBookings', 0, data.bookings, 800);
-            animateValue('statRoles', 0, data.roles, 800);
+            console.log('Stats data received:', data);
             
-            document.getElementById('statBookingsPending').textContent = data.bookings_pending;
+            // Ensure all values are numbers
+            const users = parseInt(data.users) || 0;
+            const hotels = parseInt(data.hotels) || 0;
+            const bookings = parseInt(data.bookings) || 0;
+            const roles = parseInt(data.roles) || 0;
+            const bookingsPending = parseInt(data.bookings_pending) || 0;
+            
+            console.log('Parsed values - users:', users, 'hotels:', hotels, 'bookings:', bookings, 'roles:', roles);
+            
+            // Animate stat updates
+            animateValue('statUsers', 0, users, 800);
+            animateValue('statHotels', 0, hotels, 800);
+            animateValue('statBookings', 0, bookings, 800);
+            animateValue('statRoles', 0, roles, 800);
+            
+            document.getElementById('statBookingsPending').textContent = bookingsPending;
 
             // Update charts
             updateBookingStatusChart(data);

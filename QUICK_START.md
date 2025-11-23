@@ -198,6 +198,23 @@ fetch('http://localhost:8000/api/hotels', {
 });
 ```
 
+💡 Before starting the SPA, ensure the following environment variables are set in your backend `.env` (or `.env.example`) for local development:
+
+- `FRONTEND_URL`: Your React app origin (e.g. `http://localhost:3000`)
+- `SANCTUM_STATEFUL_DOMAINS`: comma-separated hosts for cookie-based auth (e.g. `localhost:3000,127.0.0.1:3000`)
+- `CORS_ALLOWED_ORIGINS`: comma-separated origins for CORS (e.g. `http://localhost:3000`)
+- `SESSION_DOMAIN`: set to `localhost` for local dev
+- `SESSION_SAME_SITE`: set to `none` to allow cross-site cookies
+- `SESSION_SECURE_COOKIE`: `false` for local dev (set `true` in production with HTTPS)
+
+Then restart the server and clear config cache:
+```bash
+php artisan config:clear
+php artisan route:clear
+php artisan cache:clear
+php artisan serve
+```
+
 ### Example: Create Booking (Authenticated)
 ```javascript
 const token = localStorage.getItem('api_token');
@@ -404,4 +421,28 @@ Start developing!
 ```bash
 php artisan serve
 # http://localhost:8000
+```
+
+### Example: React SPA (Cookie-based Sanctum authentication)
+```javascript
+// 1) Get CSRF cookie
+fetch('http://localhost:8000/sanctum/csrf-cookie', {
+  method: 'GET',
+  credentials: 'include',
+});
+
+// 2) Login (cookies will be set automatically)
+fetch('http://localhost:8000/login', {
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email: 'admin@gmail.com', password: 'admin123' }),
+});
+
+// 3) Make an authenticated request
+fetch('http://localhost:8000/api/user', {
+  method: 'GET',
+  credentials: 'include',
+  headers: { 'Accept': 'application/json' },
+}).then(res => res.json()).then(data => console.log(data));
 ```
