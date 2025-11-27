@@ -36,25 +36,14 @@ RUN a2enmod rewrite \
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-enabled/000-default.conf \
     && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
 
+# Copy application files
+COPY . .
+
 # Copy .htaccess to public folder
-RUN echo '<IfModule mod_rewrite.c>\n\
-    <IfModule mod_negotiation.c>\n\
-        Options -MultiViews\n\
-    </IfModule>\n\
-    RewriteEngine On\n\
-    RewriteCond %{REQUEST_FILENAME} !-d\n\
-    RewriteCond %{REQUEST_URI} (.+)/$\n\
-    RewriteRule ^ %1 [L,R=301]\n\
-    RewriteCond %{REQUEST_FILENAME} !-d\n\
-    RewriteCond %{REQUEST_FILENAME} !-f\n\
-    RewriteRule ^ index.php [L]\n\
-</IfModule>' > /var/www/html/public/.htaccess
+RUN cp .htaccess public/.htaccess || true
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Copy application files
-COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
