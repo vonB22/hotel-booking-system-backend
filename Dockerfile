@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libsqlite3-dev \
     sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -21,7 +22,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN docker-php-ext-install -j$(nproc) \
     pdo \
     pdo_mysql \
-    pdo_sqlite \
     mbstring \
     xml \
     zip \
