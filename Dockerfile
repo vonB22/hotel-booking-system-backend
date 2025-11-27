@@ -5,7 +5,7 @@ FROM php:8.2-apache
 WORKDIR /var/www/html
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     wget \
@@ -14,24 +14,18 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    libcurl4-openssl-dev \
-    pkg-config \
     sqlite3 \
-    libsqlite3-dev \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install \
+RUN docker-php-ext-install -j$(nproc) \
     pdo \
     pdo_mysql \
     pdo_sqlite \
     mbstring \
     xml \
     zip \
-    curl \
     bcmath \
-    ctype \
     tokenizer
 
 # Enable Apache mod_rewrite
