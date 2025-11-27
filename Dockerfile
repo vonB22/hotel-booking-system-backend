@@ -34,8 +34,32 @@ RUN a2enmod rewrite \
 # Create Apache site configuration
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Set Apache DocumentRoot to public directory
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-enabled/000-default.conf
+# Configure Apache for Laravel with proper .htaccess support
+RUN cat > /etc/apache2/sites-available/000-default.conf << 'EOF'
+<VirtualHost *:8080>
+    ServerName localhost
+    DocumentRoot /var/www/html/public
+
+    <Directory /var/www/html/public>
+        AllowOverride All
+        Require all granted
+        
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule ^ index.php [L]
+        </IfModule>
+    </Directory>
+
+    <FilesMatch \.php$>
+        SetHandler application/x-httpd-php
+    </FilesMatch>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+EOF
 
 # Copy application files
 COPY . .
@@ -66,11 +90,11 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN if [ ! -f .env ]; then cp .env.example .env; fi \
     && php artisan key:generate --force || true
 
+# Configure Apache ports
+RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
+
 # Expose port 8080 (Render uses this)
 EXPOSE 8080
-
-# Set Apache to listen on 8080
-RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
 # Start Apache in foreground
 CMD ["apache2-foreground"]
