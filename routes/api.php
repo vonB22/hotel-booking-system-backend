@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\OverviewController;
+use App\Http\Controllers\HealthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,9 @@ use App\Http\Controllers\Api\OverviewController;
 | be assigned to the "api" middleware group.
 |
 */
+
+// Health check endpoint (no CORS middleware)
+Route::get('/health', [HealthController::class, 'check']);
 
 // Wrap all API routes with cors middleware for cross-origin requests
 Route::middleware('cors')->group(function () {

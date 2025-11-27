@@ -14,4 +14,4 @@ services:
         value: debug
       - key: DB_CONNECTION
         value: mysql
-    healthCheckPath: /health
+    healthCheckPath: /api/health

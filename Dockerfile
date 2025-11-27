@@ -84,11 +84,15 @@ RUN mkdir -p storage/framework/cache \
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage/logs
 
 # Generate application key if not exists
 RUN if [ ! -f .env ]; then cp .env.example .env; fi \
     && php artisan key:generate --force || true
+
+# Run migrations and seed (optional - comment out if not needed)
+RUN php artisan migrate --force || true
 
 # Configure Apache ports
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
