@@ -22,8 +22,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-configure curl --with-openssl && \
-    docker-php-ext-install \
+RUN docker-php-ext-install \
     pdo \
     pdo_mysql \
     pdo_sqlite \
@@ -33,9 +32,7 @@ RUN docker-php-ext-configure curl --with-openssl && \
     curl \
     bcmath \
     ctype \
-    tokenizer \
-    exif \
-    json
+    tokenizer
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite \
