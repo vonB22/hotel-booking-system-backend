@@ -25,8 +25,7 @@ RUN docker-php-ext-install -j$(nproc) \
     mbstring \
     xml \
     zip \
-    bcmath \
-    tokenizer
+    bcmath
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite \
