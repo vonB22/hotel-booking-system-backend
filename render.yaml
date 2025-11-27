@@ -15,4 +15,6 @@ services:
       - key: DB_CONNECTION
         value: mysql
     healthCheckPath: /api/health
-    preDeployCommand: php artisan migrate --force
+    onDeploy: |
+      php artisan migrate --force
+      php artisan db:seed --force
