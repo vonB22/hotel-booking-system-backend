@@ -15,6 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
         // Stating APIs as stateful so Sanctum's EnsureFrontendRequestsAreStateful
         // middleware is automatically loaded for the api group.
         $middleware->statefulApi();
+        
+        // Exclude API routes from CSRF token verification
+        $middleware->validateCsrfTokens(except: [
+            'api/*',
+            'sanctum/csrf-cookie',
+        ]);
+        
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'role-api' => \App\Http\Middleware\RoleMiddlewareApi::class,
