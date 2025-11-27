@@ -56,6 +56,10 @@ RUN cat > /etc/apache2/sites-available/000-default.conf << 'EOF'
         SetHandler application/x-httpd-php
     </FilesMatch>
 
+    php_value display_errors 1
+    php_value display_startup_errors 1
+    php_value error_log /var/www/html/storage/logs/php-error.log
+
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>
