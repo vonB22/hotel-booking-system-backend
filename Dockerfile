@@ -29,12 +29,13 @@ RUN docker-php-ext-install -j$(nproc) \
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite \
-    && a2enmod headers \
-    && a2enmod http2
+    && a2enmod headers
+
+# Create Apache site configuration
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Set Apache DocumentRoot to public directory
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-enabled/000-default.conf \
-    && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-enabled/000-default.conf
 
 # Copy application files
 COPY . .

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: hotel-booking-api
+    runtime: docker
+    region: oregon
+    plan: free
+    branch: master
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: LOG_LEVEL
+        value: debug
+      - key: DB_CONNECTION
+        value: mysql
+    healthCheckPath: /health
