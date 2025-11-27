@@ -91,9 +91,6 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN if [ ! -f .env ]; then cp .env.example .env; fi \
     && php artisan key:generate --force || true
 
-# Run migrations and seed (optional - comment out if not needed)
-RUN php artisan migrate --force || true
-
 # Configure Apache ports
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
