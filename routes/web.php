@@ -7,13 +7,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HotelController;
 
-// Root route - API health check or redirect to docs
+// Root route - redirect to login
 Route::get('/', function () {
-    return response()->json([
-        'message' => 'Hotel Booking System API',
-        'api' => 'https://' . request()->getHost() . '/api',
-        'health' => 'https://' . request()->getHost() . '/api/health',
-    ]);
+    return redirect()->route('login');
 });
 
 // Public landing page (openable by admins to view the site as a guest)
