@@ -15,12 +15,15 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     libcurl4-openssl-dev \
+    pkg-config \
     sqlite3 \
     libsqlite3-dev \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install \
+RUN docker-php-ext-configure curl --with-openssl && \
+    docker-php-ext-install \
     pdo \
     pdo_mysql \
     pdo_sqlite \
