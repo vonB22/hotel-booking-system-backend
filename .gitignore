@@ -22,3 +22,10 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+import_backup.php
+import_data.php
+hotel_booking_system_db.sql
+check_ids.php
+check_permissions.php
+test_admin_perms.php
+verify_crud.php

@@ -90,19 +90,19 @@ Route::middleware('cors')->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy']);
     });
 
-    // Hotel management endpoints
-    Route::post('/hotels', [HotelController::class, 'store']);
-    Route::put('/hotels/{hotel}', [HotelController::class, 'update']);
-    Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy']);
+    // Hotel management endpoints (authenticated users with permissions)
+    Route::post('/hotels', [HotelController::class, 'store'])->middleware('permission:hotel-create');
+    Route::put('/hotels/{hotel}', [HotelController::class, 'update'])->middleware('permission:hotel-edit');
+    Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy'])->middleware('permission:hotel-delete');
 
     // Booking endpoints
     Route::get('/bookings', [BookingController::class, 'index']);
-    Route::post('/bookings', [BookingController::class, 'store']);
+    Route::post('/bookings', [BookingController::class, 'store'])->middleware('permission:booking-create');
     Route::get('/bookings/{booking}', [BookingController::class, 'show']);
-    Route::put('/bookings/{booking}', [BookingController::class, 'update']);
-    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
-    Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel']);
-    Route::patch('/bookings/{booking}/confirm', [BookingController::class, 'confirm']);
+    Route::put('/bookings/{booking}', [BookingController::class, 'update'])->middleware('permission:booking-edit');
+    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->middleware('permission:booking-delete');
+    Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->middleware('permission:booking-edit');
+    Route::patch('/bookings/{booking}/confirm', [BookingController::class, 'confirm'])->middleware('permission:booking-edit');
     });
 
 });
