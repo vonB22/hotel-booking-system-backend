@@ -181,9 +181,14 @@ return [
         /*
          * By default all permissions are cached for 24 hours to speed up performance.
          * When permissions or roles are updated the cache is flushed automatically.
+         * 
+         * On production, we reduce this to 1 minute to avoid serving stale permissions
+         * after data migrations or deployments.
          */
 
-        'expiration_time' => \DateInterval::createFromDateString('24 hours'),
+        'expiration_time' => app()->environment('production') 
+            ? \DateInterval::createFromDateString('1 minute')
+            : \DateInterval::createFromDateString('24 hours'),
 
         /*
          * The cache key used to store all permissions.

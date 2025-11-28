@@ -57,18 +57,30 @@ curl_setopt_array($ch, [
     ],
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_SSL_VERIFYPEER => false,
+    CURLOPT_VERBOSE => true,
 ]);
+
+$fp = fopen('php://memory', 'w+');
+curl_setopt($ch, CURLOPT_STDERR, $fp);
 
 $response = curl_exec($ch);
 $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$error = curl_error($ch);
 curl_close($ch);
 
 echo "HTTP $code\n";
+if ($error) {
+    echo "Curl Error: $error\n";
+}
+
+echo "Raw Response:\n";
+echo $response . "\n\n";
+
 $data = json_decode($response, true);
 if ($data) {
     echo json_encode($data, JSON_PRETTY_PRINT) . "\n";
 } else {
-    echo $response . "\n";
+    echo "(Not JSON)\n";
 }
 
 if ($code === 200) {
