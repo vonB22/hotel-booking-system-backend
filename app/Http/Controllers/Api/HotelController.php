@@ -11,10 +11,8 @@ class HotelController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
-        $this->middleware('permission:hotel-create', ['only' => ['store']]);
-        $this->middleware('permission:hotel-edit', ['only' => ['update']]);
-        $this->middleware('permission:hotel-delete', ['only' => ['destroy']]);
+        // Routes handle their own middleware
+        // $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
     /**

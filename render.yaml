@@ -16,5 +16,8 @@ services:
         value: mysql
     healthCheckPath: /api/health
     onDeploy: |
+      php artisan config:cache
+      php artisan cache:clear
+      php artisan permission:cache:clear
       php artisan migrate --force
       php artisan db:seed --force

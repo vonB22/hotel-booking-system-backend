@@ -60,7 +60,30 @@ Route::middleware('cors')->group(function () {
             'user_email' => $user->email,
             'roles' => $user->roles->pluck('name')->toArray(),
             'has_admin_role' => $user->hasRole('Admin'),
+            'hotel_edit_permission' => $user->hasPermissionTo('hotel-edit'),
+            'hotel_create_permission' => $user->hasPermissionTo('hotel-create'),
+            'hotel_delete_permission' => $user->hasPermissionTo('hotel-delete'),
             'all_roles_in_db' => \Spatie\Permission\Models\Role::pluck('name')->toArray(),
+        ]);
+    });
+
+    // Cache clear endpoint (Admin only)
+    Route::post('/debug/cache-clear', function (Request $request) {
+        $user = $request->user();
+        if (!$user->hasRole('Admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+            ], 403);
+        }
+
+        // Clear all caches
+        \Illuminate\Support\Facades\Cache::flush();
+        \Spatie\Permission\PermissionRegistrar::forgetCachedPermissions();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Cache cleared successfully',
         ]);
     });
 
