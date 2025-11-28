@@ -77,14 +77,27 @@ Route::middleware('cors')->group(function () {
             ], 403);
         }
 
-        // Clear all caches
-        \Illuminate\Support\Facades\Cache::flush();
-        \Spatie\Permission\PermissionRegistrar::forgetCachedPermissions();
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'Cache cleared successfully',
-        ]);
+        try {
+            // Clear all caches
+            \Illuminate\Support\Facades\Cache::flush();
+            
+            // Clear Spatie permission cache specifically
+            app('cache')->forget('spatie.permission.cache');
+            
+            // Force reload from database
+            \Spatie\Permission\Models\Role::all();
+            \Spatie\Permission\Models\Permission::all();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Cache cleared successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error clearing cache: ' . $e->getMessage(),
+            ], 500);
+        }
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
