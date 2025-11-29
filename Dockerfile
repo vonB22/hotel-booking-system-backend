@@ -98,14 +98,52 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN if [ ! -f .env ]; then cp .env.example .env; fi \
     && php artisan key:generate --force || true
 
+# Clear any cached bootstrap files to ensure fresh start
+RUN rm -rf /var/www/html/bootstrap/cache/* || true \
+    && rm -rf /var/www/html/storage/logs/* || true \
+    && touch /var/www/html/storage/logs/laravel.log \
+    && chmod 666 /var/www/html/storage/logs/laravel.log
+
 # Run composer scripts after Laravel is fully set up
 RUN COMPOSER_ALLOW_SUPERUSER=1 composer dump-autoload --optimize || true
 
 # Configure Apache ports
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
+# Create a startup script to ensure permissions and clear caches on container start
+RUN cat > /var/www/html/start.sh << 'STARTUP'
+#!/bin/bash
+set -e
+
+# Ensure storage and bootstrap directories exist
+mkdir -p /var/www/html/storage/framework/cache
+mkdir -p /var/www/html/storage/framework/sessions
+mkdir -p /var/www/html/storage/framework/views
+mkdir -p /var/www/html/storage/logs
+mkdir -p /var/www/html/bootstrap/cache
+
+# Fix permissions at runtime
+chown -R www-data:www-data /var/www/html/storage
+chown -R www-data:www-data /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage
+chmod -R 775 /var/www/html/bootstrap/cache
+
+# Ensure log file is writable
+touch /var/www/html/storage/logs/laravel.log
+chmod 666 /var/www/html/storage/logs/laravel.log
+
+# Clear stale bootstrap cache to prevent class resolution errors
+rm -rf /var/www/html/bootstrap/cache/config.php
+rm -rf /var/www/html/bootstrap/cache/services.php
+rm -rf /var/www/html/bootstrap/cache/packages.php
+
+# Start Apache
+exec apache2-foreground
+STARTUP
+chmod +x /var/www/html/start.sh
+
 # Expose port 8080 (Render uses this)
 EXPOSE 8080
 
-# Start Apache in foreground
-CMD ["apache2-foreground"]
+# Start using the startup script
+CMD ["/var/www/html/start.sh"]
