@@ -104,9 +104,6 @@ RUN rm -rf /var/www/html/bootstrap/cache/* || true \
     && touch /var/www/html/storage/logs/laravel.log \
     && chmod 666 /var/www/html/storage/logs/laravel.log
 
-# Run composer scripts after Laravel is fully set up
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer dump-autoload --optimize || true
-
 # Configure Apache ports
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
@@ -122,20 +119,37 @@ mkdir -p /var/www/html/storage/framework/views
 mkdir -p /var/www/html/storage/logs
 mkdir -p /var/www/html/bootstrap/cache
 
-# Fix permissions at runtime
+# Ensure .env exists
+if [ ! -f /var/www/html/.env ]; then
+  cp /var/www/html/.env.example /var/www/html/.env
+fi
+
+# Fix permissions at runtime BEFORE any artisan commands
 chown -R www-data:www-data /var/www/html/storage
 chown -R www-data:www-data /var/www/html/bootstrap/cache
+chown www-data:www-data /var/www/html/.env
 chmod -R 775 /var/www/html/storage
 chmod -R 775 /var/www/html/bootstrap/cache
+chmod 644 /var/www/html/.env
 
 # Ensure log file is writable
+mkdir -p /var/www/html/storage/logs
 touch /var/www/html/storage/logs/laravel.log
 chmod 666 /var/www/html/storage/logs/laravel.log
 
 # Clear stale bootstrap cache to prevent class resolution errors
-rm -rf /var/www/html/bootstrap/cache/config.php
-rm -rf /var/www/html/bootstrap/cache/services.php
-rm -rf /var/www/html/bootstrap/cache/packages.php
+rm -f /var/www/html/bootstrap/cache/config.php
+rm -f /var/www/html/bootstrap/cache/services.php
+rm -f /var/www/html/bootstrap/cache/packages.php
+
+# Make sure APP_KEY is set
+if ! grep -q "APP_KEY=base64:" /var/www/html/.env; then
+  php /var/www/html/artisan key:generate --force 2>/dev/null || true
+fi
+
+# Warm up Laravel cache for better performance
+php /var/www/html/artisan config:cache 2>/dev/null || true
+php /var/www/html/artisan route:cache 2>/dev/null || true
 
 # Start Apache
 exec apache2-foreground
