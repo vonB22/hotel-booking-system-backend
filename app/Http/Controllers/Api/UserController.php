@@ -61,6 +61,8 @@ class UserController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'roles' => $user->roles->pluck('name'),
+                    'status' => $user->status ?? 'Active',
+                    'password' => $user->temporary_password ?? null,
                     'created_at' => $user->created_at,
                     'updated_at' => $user->updated_at,
                 ],
@@ -87,10 +89,13 @@ class UserController extends Controller
         ]);
 
         try {
+            $plainPassword = $validated['password'];
+            
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
+                'temporary_password' => $plainPassword,
             ]);
 
             $user->assignRole($validated['role']);
@@ -103,6 +108,7 @@ class UserController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'roles' => $user->roles->pluck('name'),
+                    'password' => $plainPassword,
                 ],
             ], 201);
         } catch (\Exception $e) {
@@ -139,6 +145,7 @@ class UserController extends Controller
 
             if (isset($validated['password'])) {
                 $user->password = Hash::make($validated['password']);
+                $user->temporary_password = $validated['password'];
             }
 
             $user->save();

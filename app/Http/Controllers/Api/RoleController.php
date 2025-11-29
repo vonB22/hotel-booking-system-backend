@@ -165,11 +165,21 @@ class RoleController extends Controller
             $role = Role::findOrFail($id);
 
             // Prevent deleting critical roles
-            if (in_array($role->name, ['Admin', 'Super Admin'])) {
+            if (in_array($role->name, ['Admin', 'Super Admin', 'Manager', 'User'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Cannot delete system roles',
-                    'error' => 'This role is required for system operation',
+                    'error' => 'This is a system role and cannot be deleted',
+                ], 422);
+            }
+
+            // Check if role has users assigned
+            $userCount = \App\Models\User::role($role->name)->count();
+            if ($userCount > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cannot delete role with assigned users',
+                    'error' => "This role has {$userCount} user(s) assigned to it. Please reassign users before deleting.",
                 ], 422);
             }
 
