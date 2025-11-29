@@ -186,7 +186,7 @@ return [
          * after data migrations or deployments.
          */
 
-        'expiration_time' => app()->environment('production') 
+        'expiration_time' => env('APP_ENV') === 'production'
             ? \DateInterval::createFromDateString('1 minute')
             : \DateInterval::createFromDateString('24 hours'),
 
