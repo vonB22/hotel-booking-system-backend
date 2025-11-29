@@ -7,9 +7,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HotelController;
 
-// Root route - redirect to login
+// Root route - show welcome page
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
 
 // Public landing page (openable by admins to view the site as a guest)
