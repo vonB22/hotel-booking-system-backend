@@ -140,7 +140,8 @@ rm -rf /var/www/html/bootstrap/cache/packages.php
 # Start Apache
 exec apache2-foreground
 STARTUP
-chmod +x /var/www/html/start.sh
+
+RUN chmod +x /var/www/html/start.sh
 
 # Expose port 8080 (Render uses this)
 EXPOSE 8080
