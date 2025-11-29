@@ -74,8 +74,11 @@ RUN cp .htaccess public/.htaccess || true
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Copy .env.example to .env first so config can load during composer install
+COPY .env.example .env
+
+# Install PHP dependencies (skip scripts to avoid artisan issues during build)
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-scripts
 
 # Create necessary directories with proper permissions
 RUN mkdir -p storage/framework/cache \
@@ -94,6 +97,9 @@ RUN chown -R www-data:www-data /var/www/html \
 # Generate application key if not exists
 RUN if [ ! -f .env ]; then cp .env.example .env; fi \
     && php artisan key:generate --force || true
+
+# Run composer scripts after Laravel is fully set up
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer dump-autoload --optimize || true
 
 # Configure Apache ports
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
