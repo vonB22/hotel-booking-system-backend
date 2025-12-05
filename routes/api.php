@@ -133,12 +133,12 @@ Route::middleware('cors')->group(function () {
 
     // Booking endpoints
     Route::get('/bookings', [BookingController::class, 'index']);
-    Route::post('/bookings', [BookingController::class, 'store'])->middleware('permission:booking-create');
+    Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/bookings/{booking}', [BookingController::class, 'show']);
-    Route::put('/bookings/{booking}', [BookingController::class, 'update'])->middleware('permission:booking-edit');
-    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->middleware('permission:booking-delete');
-    Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->middleware('permission:booking-edit');
-    Route::patch('/bookings/{booking}/confirm', [BookingController::class, 'confirm'])->middleware('permission:booking-edit');
+    Route::put('/bookings/{booking}', [BookingController::class, 'update']);
+    Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
+    Route::patch('/bookings/{booking}/cancel', [BookingController::class, 'cancel']);
+    Route::patch('/bookings/{booking}/confirm', [BookingController::class, 'confirm']);
     });
 
 });
