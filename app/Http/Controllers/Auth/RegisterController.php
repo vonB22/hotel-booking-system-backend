@@ -67,9 +67,11 @@ class RegisterController extends Controller
         // Send registration email
         try {
             Mail::to($user->email)->send(new RegistrationEmail($user));
+            \Log::info('Registration email sent successfully to: ' . $user->email);
         } catch (\Throwable $e) {
             // Log email error but don't block registration
-            \Log::error('Registration email failed: ' . $e->getMessage());
+            \Log::error('Registration email failed for ' . $user->email . ': ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
         }
 
         // Do NOT log the user in. Redirect to login with success message.

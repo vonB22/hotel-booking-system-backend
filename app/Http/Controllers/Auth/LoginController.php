@@ -53,9 +53,11 @@ class LoginController extends Controller
         // Send login email to user
         try {
             Mail::to($user->email)->send(new LoginEmail($user));
+            \Log::info('Login email sent successfully to: ' . $user->email);
         } catch (\Throwable $e) {
             // Log email error but don't block login
-            \Log::error('Login email failed: ' . $e->getMessage());
+            \Log::error('Login email failed for ' . $user->email . ': ' . $e->getMessage());
+            \Log::error('Stack trace: ' . $e->getTraceAsString());
         }
     }
 }

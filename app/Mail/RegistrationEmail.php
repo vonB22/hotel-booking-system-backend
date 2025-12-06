@@ -28,7 +28,7 @@ class RegistrationEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address(env('MAIL_FROM_ADDRESS', 'noreply@stayease.com'), env('MAIL_FROM_NAME', 'StayEase')),
+            from: new Address(config('mail.from.address'), config('mail.from.name')),
             subject: 'Welcome to StayEase - Registration Successful!',
         );
     }
