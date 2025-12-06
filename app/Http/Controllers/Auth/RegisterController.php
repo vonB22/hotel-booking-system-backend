@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\RegistrationEmail;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -62,7 +64,15 @@ class RegisterController extends Controller
         } catch (\Throwable $e) {
         }
 
+        // Send registration email
+        try {
+            Mail::to($user->email)->send(new RegistrationEmail($user));
+        } catch (\Throwable $e) {
+            // Log email error but don't block registration
+            \Log::error('Registration email failed: ' . $e->getMessage());
+        }
+
         // Do NOT log the user in. Redirect to login with success message.
-        return redirect()->route('login')->with('status', 'Registration successful. Please log in.');
+        return redirect()->route('login')->with('status', 'Registration successful. Please log in. Check your email for a welcome message!');
     }
 }
